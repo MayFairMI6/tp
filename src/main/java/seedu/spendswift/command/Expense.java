@@ -24,7 +24,7 @@ public class Expense {
      * @param name The amount of the expense.
      * @param category The category associated with the expense.
      */
-    public Expense(String name, double amount, Category category) {
+    public Expense(String name, double amount, Category category, CurrencyConverter currencyConverter) {
         this.name = name;
         this.amount = amount;
         this.category = category;
