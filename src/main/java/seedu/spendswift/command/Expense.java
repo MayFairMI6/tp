@@ -12,7 +12,11 @@ public class Expense {
     private String name;
     private double amount;
     private Category category;
-
+    //@@author MayFairMI6
+    private String originalCurrency; //Amount in original currency before conversion
+    private String homeCurrency;
+    private double convertedAmount; // amount in home currency
+    //@@author kq2003
     /**
      * Constructs an Expense object with the specified name, amount, and category.
      *
@@ -24,7 +28,15 @@ public class Expense {
         this.name = name;
         this.amount = amount;
         this.category = category;
+        //@@author MayFairMI6
+        this.originalCurrency = originalCurrency;
+        this.homeCurrency = homeCurrency;
+        this.convertedAmount= currencyConverter.convert(amount,originalCurrency, homeCurrency);
     }
+    public String getFormattedAmount(){
+        return String.format("%.2f %s (%.2f %s)",amount,originalCurrency,convertedAmount,homeCurrency);
+    }
+    
 
     /**
      * Returns the name of the expense.
