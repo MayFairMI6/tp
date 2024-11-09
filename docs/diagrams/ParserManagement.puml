@@ -1,0 +1,15 @@
+@startuml
+class Parser {
+    + parseCommand(input: String): Command
+}
+
+class InputParser {
+    + parseComponent(input: String): Map<String, String>
+}
+
+Parser "1" o-- "1" InputParser : "delegates parsing"
+Parser "1" --> "1" CategoryManager : "directs commands"
+Parser "1" --> "1" BudgetManager : "directs commands"
+Parser "1" --> "1" ExpenseManager : "directs commands"
+
+@enduml

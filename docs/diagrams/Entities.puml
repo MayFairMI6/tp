@@ -1,0 +1,29 @@
+@startuml
+class Expense {
+    - String name
+    - double amount
+    - Category category
+    + getName(): String
+    + getAmount(): double
+}
+
+class Category {
+    - String name
+    + getName(): String
+}
+
+class Budget {
+    - double limit
+    - Category category
+    + getLimit(): double
+    + getCategory(): Category
+}
+
+ExpenseManager "1" o-- "0..*" Expense : "manages"
+CategoryManager "1" o-- "0..*" Category : "manages"
+BudgetManager "1" o-- "0..*" Budget : "manages"
+
+Expense "1" *-- "1" Category : "tagged with"
+Budget "1" *-- "1" Category : "associated with"
+
+@enduml

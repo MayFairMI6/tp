@@ -1,0 +1,36 @@
+@startuml
+class TrackerData {
+    - List<Category> categories
+    - List<Expense> expenses
+    - List<Budget> budgets
+    + getCategoryList(): List<Category>
+    + getExpenseList(): List<Expense>
+    + getBudgetList(): List<Budget>
+}
+
+class CategoryManager {
+    + addCategory(name: String): void
+    + formatCategoryInput(input: String): String
+}
+
+class BudgetManager {
+    + addBudgetLimit(category: String, limit: double): void
+    + viewBudget(): void
+    + resetMonthlyBudget(): void
+}
+
+class ExpenseManager {
+    + addExpense(name: String, amount: double, category: String): void
+    + deleteExpense(index: int): void
+    + viewExpensesByCategory(): void
+}
+
+TrackerData "1" o-- "0..*" Category : "stores"
+TrackerData "1" o-- "0..*" Expense : "stores"
+TrackerData "1" o-- "0..*" Budget : "stores"
+
+CategoryManager "1" ..> "1" TrackerData : "accesses"
+BudgetManager "1" ..> "1" TrackerData : "accesses"
+ExpenseManager "1" ..> "1" TrackerData : "accesses"
+
+@enduml
