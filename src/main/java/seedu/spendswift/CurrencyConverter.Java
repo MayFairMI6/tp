@@ -2,6 +2,7 @@ package seedu.spendswift.command;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,8 +12,8 @@ import java.util.Map;
 
 public class CurrencyConverter {
 
-    private static final String API_KEY = "04a6ee8bec44c7f011340564e098b97e"; // Replace with your actual API key
-    private static final String BASE_URL = "https://api.apilayer.com/exchangerates_data/latest";
+    private static final String API_KEY = System.getenv("EXCHANGE_API_KEY");  // Load API key from environment
+    private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
     private Map<String, Double> exchangeRates;
 
@@ -21,43 +22,30 @@ public class CurrencyConverter {
     }
 
     private void fetchExchangeRates(String baseCurrency) throws IOException {
-        String urlString = BASE_URL + "?base=" + baseCurrency;
+        String urlString = BASE_URL + "?access_key=" + API_KEY + "&base=" + baseCurrency;
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("apikey", API_KEY);
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode != 200) {
-            throw new IOException("Failed to fetch exchange rates. HTTP response code: " + responseCode);
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
-
-        JsonObject jsonObject = new Gson().fromJson(response.toString(), JsonObject.class);
-        exchangeRates = new Gson().fromJson(jsonObject.get("rates"), Map.class);
-
-        if (exchangeRates == null || exchangeRates.isEmpty()) {
-            throw new IOException("Failed to retrieve exchange rates from the API response.");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new IOException("HTTP error code: " + connection.getResponseCode());
+            }
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            JsonObject jsonObject = new Gson().fromJson(response.toString(), JsonObject.class);
+            exchangeRates = new Gson().fromJson(jsonObject.get("rates"), new TypeToken<Map<String, Double>>(){}.getType());
+        } finally {
+            connection.disconnect();
         }
     }
 
     public double convert(double amount, String fromCurrency, String toCurrency) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount has to be greater than zero.");
-        }
         if (fromCurrency.equals(toCurrency)) {
             return amount;
-        }
-
-        if (exchangeRates == null || !exchangeRates.containsKey(toCurrency) || !exchangeRates.containsKey(fromCurrency)) {
-            throw new IllegalArgumentException("Invalid or unsupported currency: " + fromCurrency + " or " + toCurrency);
         }
 
         double rate = exchangeRates.get(toCurrency) / exchangeRates.get(fromCurrency);
