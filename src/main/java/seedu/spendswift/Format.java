@@ -4,7 +4,7 @@ package seedu.spendswift;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-
+import java.lang.Double;
 public class Format {
     public static String formatInput(String input) {
         if (input == null || input.isEmpty()) {
