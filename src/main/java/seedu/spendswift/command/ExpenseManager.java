@@ -18,6 +18,10 @@ public class ExpenseManager {
             String name = parser.parseName(input);
             double amount = parser.parseAmount(input);
             String category = parser.parseCategory(input);
+            String originalCurrency = parser.parseOCurrency(input);
+            String homeCurrency = parser.parseHCurrency(input);
+            double convertedAmount = parser.parseCAmount(input);
+        }
 
             if (name.isEmpty() || amount == 0) {
                 System.out.println("Invalid input! Please provide name, amount, and category.");
@@ -29,7 +33,7 @@ public class ExpenseManager {
                 return;
             }
 
-            expenseManager.addExpense(trackerData, name, amount, category);
+            expenseManager.addExpense(trackerData, name, amount, category, originalCurrency,homeCurrency,convertedAmount);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
         }
@@ -68,7 +72,7 @@ public class ExpenseManager {
             categories.add(existingCategory);
             System.out.println("Category '" + formattedCategoryName + "' added successfully.");
         }
-        Expense newExpense = new Expense(name, amount, existingCategory,homeCurrency,currencyConverter);
+        Expense newExpense = new Expense(name, amount, existingCategory,originalCurrency, homeCurrency, convertedAmount);
         expenses.add(newExpense);
 
         // update categories and expenses
