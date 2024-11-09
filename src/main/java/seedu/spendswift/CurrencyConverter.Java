@@ -41,7 +41,7 @@ public class CurrencyConverter {
     }
 
  public double convert(double amount, String fromCurrency, String toCurrency) {
-        if (amount < =0) {
+        if (amount<=0) {
             throw new IllegalArgumentException("Amount has to be greater than zero.");
         }
         if (fromCurrency.equals(toCurrency)) {
