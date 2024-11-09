@@ -11,33 +11,32 @@ import java.util.Map;
 
 public class ExpenseManager {
 
-    //@@author kq2003
-    public void addExpenseRequest(String input, ExpenseManager expenseManager, TrackerData trackerData) {
-        try {
-            InputParser parser = new InputParser();
-            String name = parser.parseName(input);
-            double amount = parser.parseAmount(input);
-            String category = parser.parseCategory(input);
-            String originalCurrency = parser.parseOCurrency(input);
-            String homeCurrency = parser.parseHCurrency(input);
-            double convertedAmount = parser.parseCAmount(input);
+//@@author kq2003
+public void addExpenseRequest(String input, ExpenseManager expenseManager, TrackerData trackerData) {
+    try {
+        InputParser parser = new InputParser();
+        String name = parser.parseName(input);
+        double amount = parser.parseAmount(input);
+        String category = parser.parseCategory(input);
+        String originalCurrency = parser.parseOCurrency(input);
+        String homeCurrency = parser.parseHCurrency(input);
+        double convertedAmount = parser.parseCAmount(input);
+
+        if (name.isEmpty() || amount == 0) {
+            System.out.println("Invalid input! Please provide name, amount, and category.");
+            return;
         }
 
-            if (name.isEmpty() || amount == 0) {
-                System.out.println("Invalid input! Please provide name, amount, and category.");
-                return;
-            }
-
-            if (amount < 0) {
-                System.out.println("Invalid input! Please provide a positive amount!");
-                return;
-            }
-
-            expenseManager.addExpense(trackerData, name, amount, category, originalCurrency,homeCurrency,convertedAmount);
-        } catch (Exception e) {
-            System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
+        if (amount < 0) {
+            System.out.println("Invalid input! Please provide a positive amount!");
+            return;
         }
+
+        expenseManager.addExpense(trackerData, name, amount, category, originalCurrency, homeCurrency, convertedAmount);
+    } catch (Exception e) {
+        System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
     }
+}
 
     /**
      * Adds a new expense with the specified name, amount, and category.
