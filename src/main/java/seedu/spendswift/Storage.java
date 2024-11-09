@@ -90,7 +90,7 @@ public class Storage {
                     double amount = Double.parseDouble(parts[1]);
                     String categoryName = parts[2];
                     Category category = loadCategory(trackerData, categoryName);
-                    Expense expense = new Expense(expenseName, amount, category,homeCurrency,currencyConverter);
+                    Expense expense = new Expense(expenseName, amount, category,originalCurrency, homeCurrency,convertedAmount);
                     trackerData.getExpenses().add(expense);
                 }
             }
