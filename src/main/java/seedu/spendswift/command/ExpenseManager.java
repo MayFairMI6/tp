@@ -18,9 +18,9 @@ public void addExpenseRequest(String input, ExpenseManager expenseManager, Track
         String name = parser.parseName(input);
         double amount = parser.parseAmount(input);
         String category = parser.parseCategory(input);
-        String originalCurrency = parser.parseOCurrency(input);
-        String homeCurrency = parser.parseHCurrency(input);
-        double convertedAmount = parser.parseCAmount(input);
+        String originalCurrency = parser.parseOriginalCurrency(input);
+        String homeCurrency = parser.parseHomeCurrency(input);
+        double convertedAmount = CurrencyConverter.convert(amount,fromCurrency,toCurrency);
 
         if (name.isEmpty() || amount == 0) {
             System.out.println("Invalid input! Please provide name, amount, and category.");
