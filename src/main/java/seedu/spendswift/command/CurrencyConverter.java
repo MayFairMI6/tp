@@ -40,7 +40,10 @@ public class CurrencyConverter {
         exchangeRates = new Gson().fromJson(jsonObject.get("rates"), Map.class);
     }
 
-    public double convert(double amount, String fromCurrency, String toCurrency) {
+ public double convert(double amount, String fromCurrency, String toCurrency) {
+        if (amount < =0) {
+            throw new IllegalArgumentException("Amount has to be greater than zero.");
+        }
         if (fromCurrency.equals(toCurrency)) {
             return amount;
         }
