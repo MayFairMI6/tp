@@ -1,43 +1,71 @@
-name: Java CI
+plugins {
+    id 'java'
+    id 'application'
+    id 'checkstyle'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
 
-on: [push, pull_request]
+repositories {
+    mavenCentral()
+}
 
-jobs:
-  build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
+ext {
+    junitVersion = '5.10.0'
+    okhttpVersion = '4.11.0' // Update to the latest stable version as needed
+    gsonVersion = '2.10.1' // Update to the latest stable version as needed
+    slf4jVersion = '2.0.9'
+    logbackVersion = '1.4.11'
+}
 
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@master
+dependencies {
+    // JUnit 5 for testing
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}" // Add this line
 
-      - name: Setup JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: '17'
-          java-package: jdk+fx
+    // Other dependencies
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
+}
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+test {
+    useJUnitPlatform()
 
-      - name: Build and check with Gradle
-        run: ./gradlew check --warning-mode all --info --stacktrace -PextraCompilerArgs="-Xlint:unchecked"
+    testLogging {
+        events "passed", "skipped", "failed"
 
-      - name: Perform IO redirection test (*NIX)
-        if: runner.os == 'Linux'
-        working-directory:  ${{ github.workspace }}/text-ui-test
-        run: ./runtest.sh
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+        showStandardStreams = false
+    }
+}
 
-      - name: Perform IO redirection test (MacOS)
-        if: always() && runner.os == 'macOS'
-        working-directory:  ${{ github.workspace }}/text-ui-test
-        run: ./runtest.sh
+application {
+    mainClass.set("seedu.spendswift.SpendSwift")
+}
 
-      - name: Perform IO redirection test (Windows)
-        if: always() && runner.os == 'Windows'
-        working-directory:  ${{ github.workspace }}/text-ui-test
-        shell: cmd
-        run: runtest.bat
+shadowJar {
+    archiveBaseName.set("spendswift")
+    archiveClassifier.set("")
+}
+
+checkstyle {
+    toolVersion = '10.2'
+    // Optionally, specify a Checkstyle config file
+    // configFile = file("config/checkstyle/checkstyle.xml")
+}
+
+run {
+    standardInput = System.in
+    enableAssertions = true
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
