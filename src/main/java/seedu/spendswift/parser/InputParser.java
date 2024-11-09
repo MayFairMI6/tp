@@ -1,4 +1,3 @@
-//@glenda-1506
 package seedu.spendswift.parser;
 
 public class InputParser {
@@ -23,7 +22,7 @@ public class InputParser {
 
         return input.substring(startIndex, endIndex).trim();
     }
-    //@MayFairMI6
+
     public String parseHomeCurrency(String input) throws IllegalArgumentException {
         return parseCurrency(input, "hcur/");
     }
@@ -46,6 +45,7 @@ public class InputParser {
         return currency.toUpperCase();
     }
 }
+
 
 
 
