@@ -80,18 +80,18 @@ public class BudgetManager {
     }
 
     //@@author MayFairMI6
-    /**
-     * Sets a budget limit for a specific category.
-     *
-     * If the category already has a budget, this method updates the budget limit.
-     * If the category does not have a budget set, it creates a new budget for the category.
-     *
-     * This method is used to track and control spending limits for different categories.
-     * After setting the budget, a message is displayed to confirm the action.
-     *
-     * @param categoryName The name of the category to set the budget for
-     * @param limit The budget limit to be set for the category (in dollars)
-     */
+         /**
+         * Sets a budget limit for a specific category.
+         *
+         * If the category already has a budget, this method updates the budget limit.
+         * If the category does not have a budget set, it creates a new budget for the category.
+         *
+         * This method is used to track and control spending limits for different categories.
+         * After setting the budget, a message is displayed to confirm the action.
+         *
+         * @param categoryName The name of the category to set the budget for
+         * @param limit The budget limit to be set for the category (in dollars)
+         */
     public  void setBudgetLimit(TrackerData trackerData, String categoryName, double limit) {
         List<Category> categories = trackerData.getCategories();
         Map<Category, Budget> budgets = trackerData.getBudgets();
