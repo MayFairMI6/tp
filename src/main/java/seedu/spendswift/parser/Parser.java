@@ -50,4 +50,29 @@ public class Parser {
 
         return false;
     }
+
+    private String parseAmount(String input) {
+    String[] parts = input.split("\\s+");
+    for (String part : parts) {
+        try {
+            Double.parseDouble(part);
+            return part; // Return the first numeric value which represents the amount
+        } catch (NumberFormatException e) {
+            // Continue if the part isn't numeric, ensuring only the amount is parsed
+        }
+    }
+    return ""; // Return empty if no numeric amount is found
+    }
+    
+    private String parseCurrency(String input) {
+    String[] parts = input.split("\\s+");
+    for (String part : parts) {
+        // Check if the part matches exactly three letters, which is typical for currency codes
+        if (part.matches("[a-zA-Z]{3}")) {
+            return part.toUpperCase(); // Return the currency code in uppercase to standardize
+        }
+    }
+    return ""; // Return empty if no currency code is found
+}
+
 }
