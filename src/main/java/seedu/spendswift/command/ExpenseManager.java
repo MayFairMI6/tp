@@ -68,7 +68,7 @@ public class ExpenseManager {
             categories.add(existingCategory);
             System.out.println("Category '" + formattedCategoryName + "' added successfully.");
         }
-        Expense newExpense = new Expense(name, amount, existingCategory);
+        Expense newExpense = new Expense(name, amount, existingCategory,homeCurrency,currencyConverter);
         expenses.add(newExpense);
 
         // update categories and expenses
