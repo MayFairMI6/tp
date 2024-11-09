@@ -1,7 +1,7 @@
 package seedu.spendswift.command;
 
-import seedu.spendswift.Format;
-import seedu.spendswift.parser.InputParser;
+//import seedu.spendswift.Format;
+//import seedu.spendswift.parser.InputParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.BufferedReader;
@@ -40,5 +40,15 @@ public class CurrencyConverter {
         exchangeRates = new Gson().fromJson(jsonObject.get("rates"), Map.class);
     }
 
-    
+ public double convert(double amount, String fromCurrency, String toCurrency) {
+        if (amount < =0) {
+            throw new IllegalArgumentException("Amount has to be greater than zero.");
+        }
+        if (fromCurrency.equals(toCurrency)) {
+            return amount;
+        }
+
+        double rate = exchangeRates.get(toCurrency) / exchangeRates.get(fromCurrency);
+        return amount * rate;
+    }
 }
