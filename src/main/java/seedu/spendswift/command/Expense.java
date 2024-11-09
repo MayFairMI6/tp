@@ -33,9 +33,6 @@ public class Expense {
         this.homeCurrency = homeCurrency;
         this.convertedAmount= currencyConverter.convert(amount,originalCurrency, homeCurrency);
     }
-    public String getFormattedAmount(){
-        return String.format("%.2f %s (%.2f %s)",amount,originalCurrency,convertedAmount,homeCurrency);
-    }
     
 
     /**
