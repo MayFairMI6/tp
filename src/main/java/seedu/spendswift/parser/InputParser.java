@@ -10,7 +10,7 @@ public class InputParser {
 
         startIndex += prefix.length();
         int endIndex = input.length();
-        String[] prefixes = {"n/", "a/", "c/", "e/", "l/","cur/"};
+        String[] prefixes = {"n/", "a/", "c/", "e/", "l/","hcur/","ocur/"};
 
         for (String otherPrefix : prefixes) {
             if (!otherPrefix.equals(prefix)) {
@@ -68,20 +68,40 @@ public class InputParser {
      * @return the normalized currency code if valid.
      * @throws IllegalArgumentException if the currency code does not meet the required format.
      */
-    public String parseCurrency(String input) throws IllegalArgumentException {
-        // First, check if there's a potential currency format in the input
-        if (!input.matches(".*cur/[a-zA-Z]{3}.*")) {
-            throw new IllegalArgumentException("Error: A 3-letter currency code is needed after 'cur/'.");
-        }
-
-        // Extract the currency using parseComponent from the Parser class
-        String currency = Parser.parseComponent(input, "cur/");
-        if (currency.isEmpty() || !currency.matches("[a-zA-Z]{3}")) {
-            throw new IllegalArgumentException("Error: A valid 3-letter currency code is needed after 'cur/'.");
-        }
-
-        return currency.toUpperCase();  // Return the currency code in uppercase
+   public String parseHomeCurrency(String input) throws IllegalArgumentException {
+        return parseCurrency(input, "hcur/");
     }
+
+     /**
+     * Parses the original currency from the given input string if it meets the format requirements.
+     * @param input the command input string.
+     * @return the normalized original currency code if valid.
+     * @throws IllegalArgumentException if the original currency code does not meet the required format.
+     */
+    public String parseOriginalCurrency(String input) throws IllegalArgumentException {
+        return parseCurrency(input, "ocur/");
+    }
+
+     /**
+     * Helper method to parse currency with specified prefix.
+     * @param input the command input string.
+     * @param currencyPrefix the prefix for the currency.
+     * @return the normalized currency code if valid.
+     * @throws IllegalArgumentException if the currency code does not meet the required format.
+     */
+    private String parseCurrency(String input, String currencyPrefix) throws IllegalArgumentException {
+        if (!input.matches(".*" + currencyPrefix + "[a-zA-Z]{3}.*")) {
+            throw new IllegalArgumentException("Error: A 3-letter currency code is needed after '" + currencyPrefix + "'.");
+        }
+
+        String currency = this.parseComponent(input, currencyPrefix);
+        if (currency.isEmpty() || !currency.matches("[a-zA-Z]{3}")) {
+            throw new IllegalArgumentException("Error: A valid 3-letter currency code is needed after '" + currencyPrefix + "'.");
+        }
+
+        return currency.toUpperCase();
+    }
+
 
     
 }
