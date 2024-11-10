@@ -15,6 +15,7 @@ public class Budget {
     public Budget(Category category, double limit,String homeCurrency) {
         this.category = category;
         this.limit = limit;
+        this.trackerData = trackerData;
         this.homeCurrency= homeCurrency;
         try {
             this.currencyConverter = new CurrencyConverter(homeCurrency);
