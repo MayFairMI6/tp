@@ -122,7 +122,7 @@ public class BudgetManager {
             System.out.println("Updated budget for category '" + existingCategory + "' to "
                     + Format.formatAmount(limit));
         } else {
-            Budget newBudget = new Budget(existingCategory, limit,homeCurrency);
+            Budget newBudget = new Budget(existingCategory, limit,homeCurrency,trackerData);
             budgets.put(existingCategory, newBudget);
             System.out.println("Set budget for category '" + existingCategory + "' to " + Format.formatAmount(limit));
         }
