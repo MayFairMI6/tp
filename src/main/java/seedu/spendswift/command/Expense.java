@@ -32,7 +32,7 @@ public class Expense {
         //@@author MayFairMI6
         this.originalCurrency = originalCurrency;
         this.homeCurrency = homeCurrency;
-        this.convertedAmount= currencyConverter.convert(amount,originalCurrency, homeCurrency);
+        this.convertedAmount= CurrencyConverter.convert(amount,originalCurrency, homeCurrency);
     }
     
 
@@ -63,10 +63,10 @@ public class Expense {
         this.category = category;
     }
 
-    public void getoriginalCurrency(){
+    public String getoriginalCurrency(){
         return originalCurrency;
     }
-    public void gethomeCurrency(){
+    public String gethomeCurrency(){
         return homeCurrency;
     }
     public double getConvertedAmount(){
