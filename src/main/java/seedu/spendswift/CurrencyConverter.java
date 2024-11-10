@@ -43,7 +43,7 @@ public class CurrencyConverter {
         }
     }
 
-    public double convert(double amount, String fromCurrency, String toCurrency) {
+    public static double convert(double amount, String fromCurrency, String toCurrency) {
         if (fromCurrency.equals(toCurrency)) {
             return amount;
         }
