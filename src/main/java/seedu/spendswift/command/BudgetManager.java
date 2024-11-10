@@ -2,6 +2,7 @@ package seedu.spendswift.command;
 
 import seedu.spendswift.Format;
 import seedu.spendswift.parser.InputParser;
+import seedu.spendswift.CurrencyConverter;
 
 import java.util.Calendar;
 import java.util.HashMap;
