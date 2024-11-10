@@ -3,7 +3,7 @@ package seedu.spendswift.command;
 
 import seedu.spendswift.Format;
 import seedu.spendswift.parser.InputParser;
-
+import seedu.spendswift.CurrencyConverter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
