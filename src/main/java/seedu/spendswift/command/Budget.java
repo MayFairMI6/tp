@@ -2,6 +2,7 @@ package seedu.spendswift.command;
 
 import seedu.spendswift.Format;
 import java.io.IOException;
+import seedu.spendswift.currency;
 
 
 //@@author MayFairMI6
