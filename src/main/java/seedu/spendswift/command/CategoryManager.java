@@ -34,5 +34,19 @@ public class CategoryManager {
         trackerData.setCategories(categories);
         System.out.println("Category '" + newCategory + "' added successfully.");
     }
+
+    public static void viewAllCategories(TrackerData trackerData) {
+        List<Category> categories = trackerData.getCategories();
+        if (categories.isEmpty()) {
+            System.out.println("No categories available.");
+        } else {
+            System.out.println("Categories:");
+            int index = 1;
+            for (Category category : categories) {
+                System.out.println(index + ". " + category.getName());
+                index++;
+            }
+        }
+    }
 }
 
