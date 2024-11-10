@@ -11,7 +11,7 @@ public class Budget {
     private Category category; // Private to prevent unauthorized access or changes
     private double limit; // Private to control modifications to the budget
     private TrackerData trackerData;
-    public Budget(Category category, double limit) {
+    public Budget(Category category, double limit,String homeCurrency, TrackerData trackerData) {
         this.category = category;
         this.limit = limit;
         this.trackerData= trackerData;
@@ -47,7 +47,7 @@ public class Budget {
     }
 
     @Override
-    public String toString() {
-        return "Budget for category '" + category + "' is " + Format.formatAmount(limit);
+ public String toString() {
+        return "Budget for category '" + category + "' is " + Format.formatAmount(limit) + " " + homeCurrency;
     }
 }
