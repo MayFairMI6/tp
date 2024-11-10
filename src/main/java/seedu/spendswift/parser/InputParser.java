@@ -1,5 +1,6 @@
 package seedu.spendswift.parser;
 import seedu.spendswift.CurrencyConverter;
+import seedu.spendswift.ErrorMessage;
 
 public class InputParser {
     private String parseComponent(String input, String prefix) {
