@@ -27,7 +27,6 @@ public class Storage {
             for (Map.Entry<Category, Budget> entry : trackerData.getBudgets().entrySet()) {
                 String categoryName = entry.getKey().getName();
                 double budgetLimit = entry.getValue().getLimit();
-                String homeCurrency= entry.getKey().gethomeCurrency();
                 writer.write(categoryName + ", " + budgetLimit + "\n");
             }
 
