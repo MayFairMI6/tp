@@ -62,6 +62,16 @@ public class Expense {
         this.category = category;
     }
 
+    public void getoriginalCurrency(){
+        return originalCurrency;
+    }
+    public void gethomeCurrency(){
+        return homeCurrency;
+    }
+    public double getConvertedAmount(){
+        return convertedAmount;
+    }
+
 
     /**
      * Returns a string representation of the expense, including name, formatted amount, and category.
@@ -70,6 +80,10 @@ public class Expense {
      */
     @Override
     public String toString() {
-        return " Item: " + name + ", Amount: " + Format.formatAmount(amount) + ", Category: " + getCategory();
-    }
+    return "Item: " + name + 
+           ",  Amount: " + Format.formatAmount(amount) + " " + originalCurrency + 
+           ", Converted Amount: " + Format.formatAmount(convertedamount) + " " + homeCurrency + 
+           ", Category: " + getCategory();
+}
+
 }
