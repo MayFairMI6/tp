@@ -9,7 +9,6 @@ import java.io.IOException;
 //@@author MayFairMI6
 public class Budget {
     private String homeCurrency;
-    private CurrencyConverter currencyConverter;
     private Category category; // Private to prevent unauthorized access or changes
     private double limit; // Private to control modifications to the budget
     private TrackerData trackerData;
