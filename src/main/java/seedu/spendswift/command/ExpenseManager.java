@@ -50,7 +50,7 @@ public void addExpenseRequest(String input, ExpenseManager expenseManager, Track
      * @param amount       The amount of the expense.
      * @param categoryName The name of the category to which the expense belongs.
      */
-    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, String originalCurrency, String homeCurrency, String convertedAmount) {
+    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, String originalCurrency, String homeCurrency, double convertedAmount {
         List<Expense> expenses = trackerData.getExpenses();
         List<Category> categories = trackerData.getCategories();
 
