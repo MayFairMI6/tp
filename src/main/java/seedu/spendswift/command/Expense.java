@@ -1,6 +1,7 @@
 package seedu.spendswift.command;
 
 import seedu.spendswift.Format;
+import seedu.spendswift.CurrencyConverter
 
 //@@author kq2003
 /**
