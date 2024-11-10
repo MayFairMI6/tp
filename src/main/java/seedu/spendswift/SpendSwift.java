@@ -6,7 +6,6 @@ import seedu.spendswift.command.CategoryManager;
 import seedu.spendswift.command.ExpenseManager;
 import seedu.spendswift.command.TrackerData;
 import seedu.spendswift.parser.Parser;
-import seedu.spendswift.CurrencyConverter;
 
 import java.io.IOException;
 import java.util.Scanner;
