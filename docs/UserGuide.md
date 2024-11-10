@@ -237,6 +237,9 @@ For example, if you enter an amount of 5.678, it will be saved as 5.68.
 **A**: Use the `toggle-reset` command to switch the automatic monthly budget reset on or off. 
 If the feature is currently off, typing the command will turn it on, and vice versa.
 
+**Q**: Do you have any upper limit on the budget that can be set?
+**A**: Currently, our application supports budgets upto 1000000000000000 
+
 
 ## Command Summary
 - Add expense `add-expense n/NAME a/AMOUNT [c/CATEGORY]`
