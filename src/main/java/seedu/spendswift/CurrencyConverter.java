@@ -15,7 +15,7 @@ public class CurrencyConverter {
     private static final String API_KEY = System.getenv("EXCHANGE_API_KEY");  // Load API key from environment
     private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
-    private Map<String, Double> exchangeRates;
+    private static Map<String, Double> exchangeRates;
 
     public CurrencyConverter(String baseCurrency) throws IOException {
         fetchExchangeRates(baseCurrency);
