@@ -12,7 +12,7 @@ import java.util.Map;
 //@@author kq2003
 public class BudgetManager {
     public int lastResetMonth;
-    private string homeCurrency;
+    private String homeCurrency;
   
     public boolean isAutoResetEnabled = false;  // Default state
 
