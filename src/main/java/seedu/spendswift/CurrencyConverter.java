@@ -21,7 +21,7 @@ public class CurrencyConverter {
         fetchExchangeRates(baseCurrency);
     }
 
-    private void fetchExchangeRates(String baseCurrency) throws IOException {
+    private static void fetchExchangeRates(String baseCurrency) throws IOException {
         String urlString = BASE_URL + "?access_key=" + API_KEY + "&base=" + baseCurrency;
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
