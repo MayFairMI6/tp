@@ -1,4 +1,5 @@
 package seedu.spendswift.parser;
+import seedu.spendswift.CurrencyConverter;
 
 public class InputParser {
     private String parseComponent(String input, String prefix) {
