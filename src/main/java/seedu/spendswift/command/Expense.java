@@ -83,7 +83,7 @@ public class Expense {
     public String toString() {
     return "Item: " + name + 
            ",  Amount: " + Format.formatAmount(amount) + " " + originalCurrency + 
-           ", Converted Amount: " + Format.formatAmount(convertedamount) + " " + homeCurrency + 
+           ", Converted Amount: " + Format.formatAmount(convertedAmount) + " " + homeCurrency + 
            ", Category: " + getCategory();
 }
 
