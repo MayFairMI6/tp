@@ -141,13 +141,14 @@ public class BudgetManager {
             InputParser parser = new InputParser();
             String category = parser.parseCategory(input);
             double limit = parser.parseLimit(input);
+            String homeCurrency = parser.parseHomeCurrency(input);
 
             if (category == null || category.isEmpty() || limit == 0) {
                 System.out.println("Invalid input! Please provide category name and limit.");
                 return;
             }
 
-            budgetManager.setBudgetLimit(trackerData, category, limit);
+            budgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
         }
