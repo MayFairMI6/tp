@@ -1,4 +1,5 @@
 package seedu.spendswift;
+import seedu.spendswift.package;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
