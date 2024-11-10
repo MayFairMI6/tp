@@ -17,7 +17,6 @@ public class Budget {
         this.limit = limit;
         this.trackerData = trackerData;
         this.homeCurrency= homeCurrency;
-        this.CurrencyConverter=currencyConverter;
         try {
             this.currencyConverter = new CurrencyConverter(homeCurrency);
         } catch (IOException e) {
