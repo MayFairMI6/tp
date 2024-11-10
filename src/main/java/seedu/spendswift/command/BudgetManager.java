@@ -11,12 +11,14 @@ import java.util.Map;
 //@@author kq2003
 public class BudgetManager {
     public int lastResetMonth;
+    private string homeCurrency;
   
     public boolean isAutoResetEnabled = false;  // Default state
 
     public BudgetManager() {
         this.lastResetMonth = -1;
         this.isAutoResetEnabled = false;
+        this.homeCurrency=homeCurrency;
     }
 
     public boolean getAutoResetStatus() {
@@ -120,7 +122,7 @@ public class BudgetManager {
             System.out.println("Updated budget for category '" + existingCategory + "' to "
                     + Format.formatAmount(limit));
         } else {
-            Budget newBudget = new Budget(existingCategory, limit);
+            Budget newBudget = new Budget(existingCategory, limit,homeCurrency);
             budgets.put(existingCategory, newBudget);
             System.out.println("Set budget for category '" + existingCategory + "' to " + Format.formatAmount(limit));
         }
@@ -165,6 +167,7 @@ public class BudgetManager {
      * If no budgets are set, a message is shown indicating the absence of budgets.
      */
     public void viewBudget(TrackerData trackerData) {
+        
         List<Expense> expenses = trackerData.getExpenses();
         Map<Category, Budget> budgets = trackerData.getBudgets();
 
@@ -191,12 +194,12 @@ public class BudgetManager {
             double remainingBudget = budget.getLimit() - totalExpense;
 
             if (remainingBudget >= 0) {
-                System.out.println(category + ": " + Format.formatAmount(totalExpense) + " spent, " +
-                        Format.formatAmount(remainingBudget) + " remaining");
+                System.out.println(category + ": " + Format.formatAmount(totalExpense) + " " + homeCurrency + " spent, " +
+                Format.formatAmount(remainingBudget) + " " + homeCurrency + " remaining");
             } else {
                 Double positive = Math.abs(remainingBudget);
-                System.out.println(category + ": " + Format.formatAmount(totalExpense) + " spent, " +
-                        "Over budget by " + Format.formatAmount(positive));
+                System.out.println(category + ": " + Format.formatAmount(totalExpense) + " " + homeCurrency + " spent, " +
+                "Over budget by " + Format.formatAmount(positive) + " " + homeCurrency); // Added homeCurrency code
             }
         }
 
