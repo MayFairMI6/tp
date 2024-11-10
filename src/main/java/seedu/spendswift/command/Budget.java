@@ -1,5 +1,4 @@
 package seedu.spendswift.command;
-import seedu.spendswift.CurrencyConverter;
 
 import seedu.spendswift.Format;
 import java.io.IOException;
