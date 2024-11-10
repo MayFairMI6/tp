@@ -238,7 +238,7 @@ For example, if you enter an amount of 5.678, it will be saved as 5.68.
 If the feature is currently off, typing the command will turn it on, and vice versa.
 
 **Q**: Do you have any upper limit on the budget that can be set?
-**A**: Currently, our application supports budgets upto 1000000000000000 
+**A**: Currently, our application supports budgets upto 1000000000000000.
 
 
 ## Command Summary
