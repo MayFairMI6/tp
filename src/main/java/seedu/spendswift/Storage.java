@@ -27,6 +27,7 @@ public class Storage {
             for (Map.Entry<Category, Budget> entry : trackerData.getBudgets().entrySet()) {
                 String categoryName = entry.getKey().getName();
                 double budgetLimit = entry.getValue().getLimit();
+                String homeCurrency= entry.getKey().gethomeCurrency();
                 writer.write(categoryName + ", " + budgetLimit + "\n");
             }
 
@@ -35,6 +36,9 @@ public class Storage {
                 String expenseName = expense.getName();
                 double amount = expense.getAmount();
                 String categoryName = expense.getCategory().getName();
+                String originalCurrency = expense.getOriginalCurrency();
+                String gethomeCurrency = expense.gethomeCurrency();
+                String getConvertedAmount = expense.getConvertedAmount();
                 writer.write(expenseName + ", " + amount + ", " + categoryName + "\n");
             }
         }
@@ -84,11 +88,15 @@ public class Storage {
                     double limit = Double.parseDouble(parts[1]);
                     Category category = new Category(categoryName);
                     Budget budget = new Budget(category, limit);
-                    trackerData.getBudgets().put(category, budget);
+                    String homeCurrency=parts[2];
+                    trackerData.getBudgets().put(category, budget,homeCurrency);
                 } else {
                     String expenseName = parts[0];
                     double amount = Double.parseDouble(parts[1]);
                     String categoryName = parts[2];
+                    String originalCurrency = parts[3];
+                    String homeCurrency = parts[4];
+                    double convertedAmount  = CurrencyConverter.convert(amount,originalCurrency,homeCurrency);
                     Category category = loadCategory(trackerData, categoryName);
                     Expense expense = new Expense(expenseName, amount, category,originalCurrency, homeCurrency,convertedAmount);
                     trackerData.getExpenses().add(expense);
