@@ -32,7 +32,7 @@ public class Expense {
         //@@author MayFairMI6
         this.originalCurrency = originalCurrency;
         this.homeCurrency = homeCurrency;
-        this.convertedAmount= CurrencyConverter.convert(amount,originalCurrency, homeCurrency);
+        this.convertedAmount= convertedAmount;
     }
     
 
