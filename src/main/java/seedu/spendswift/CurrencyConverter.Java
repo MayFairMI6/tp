@@ -1,4 +1,4 @@
-package seedu.spendswift;
+package seedu.spendswift.currency
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
