@@ -1,7 +1,5 @@
 //@@author glenda-1506
 package seedu.spendswift.parser;
-
-import seedu.spendswift.Storage;
 import seedu.spendswift.command.BudgetManager;
 import seedu.spendswift.command.CategoryManager;
 import seedu.spendswift.command.ExpenseManager;
@@ -13,10 +11,9 @@ public class Parser {
     private final CategoryManager categoryManager;
     private final BudgetManager budgetManager;
     private final UI ui;
-    private Storage storage;
 
-    public Parser(ExpenseManager expenseManager, CategoryManager categoryManager, BudgetManager budgetManager, UI ui,
-                  Storage storage) {
+
+    public Parser(ExpenseManager expenseManager, CategoryManager categoryManager, BudgetManager budgetManager, UI ui) {
         this.expenseManager = expenseManager;
         this.categoryManager = categoryManager;
         this.budgetManager = budgetManager;
@@ -25,8 +22,6 @@ public class Parser {
     }
 
     public boolean parseCommand(String input, TrackerData trackerData) {
-        String filePath = "spendswift.txt";
-        storage = new Storage(filePath);
         input = input.trim().toLowerCase();
 
         if (input.startsWith("add-expense")) {
