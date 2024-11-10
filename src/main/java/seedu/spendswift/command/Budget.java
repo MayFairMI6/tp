@@ -12,7 +12,7 @@ public class Budget {
     private Category category; // Private to prevent unauthorized access or changes
     private double limit; // Private to control modifications to the budget
     private TrackerData trackerData;
-    public Budget(Category category, double limit,String homeCurrency) {
+    public Budget(Category category, double limit,String homeCurrency, CurrencyConverter currencyConverter) {
         this.category = category;
         this.limit = limit;
         this.trackerData = trackerData;
