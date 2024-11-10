@@ -123,7 +123,7 @@ public void setBudgetLimit(TrackerData trackerData, String categoryName, double 
         System.out.println("Updated budget for category '" + existingCategory + "' to "
                 + Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
     } else {
-        Budget newBudget = new Budget(existingCategory, limit, homeCurrency); // Pass homeCurrency to constructor
+        Budget newBudget = new Budget(existingCategory, limit, homeCurrency,currencyConverter); // Pass homeCurrency to constructor
         budgets.put(existingCategory, newBudget);
         System.out.println("Set budget for category '" + existingCategory + "' to "
                 + Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
