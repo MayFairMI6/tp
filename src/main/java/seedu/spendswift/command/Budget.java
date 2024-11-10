@@ -3,7 +3,7 @@ package seedu.spendswift.command;
 import seedu.spendswift.Format;
 import seedu.spendswift.CurrencyConverter;
 import java.io.IOException;
-import seedu.spendswift.currency.CurrencyConverter;
+
 
 
 //@@author MayFairMI6
