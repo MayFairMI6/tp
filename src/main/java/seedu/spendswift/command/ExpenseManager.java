@@ -20,7 +20,7 @@ public void addExpenseRequest(String input, ExpenseManager expenseManager, Track
         String category = parser.parseCategory(input);
         String originalCurrency = parser.parseOriginalCurrency(input);
         String homeCurrency = parser.parseHomeCurrency(input);
-        double convertedAmount = CurrencyConverter.convert(amount,originalCurrency,homeCurrency);
+        double convertedAmount = CurrencyConverter.convert(amount, originalCurrency, homeCurrency);
 
         if (name.isEmpty() || amount == 0) {
             System.out.println("Invalid input! Please provide name, amount, and category.");
@@ -198,5 +198,6 @@ public void addExpenseRequest(String input, ExpenseManager expenseManager, Track
         System.out.println("Category '" + formattedCategoryName + "' does not exist.");
     }
 }
+
 
 
