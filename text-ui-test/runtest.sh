@@ -1,32 +1,41 @@
 #!/bin/bash
 
-# Make the script executable
-chmod +x runtest.sh
+# Make sure we're in the correct directory by checking for gradlew
+if [[ ! -f "./gradlew" && ! command -v gradle &> /dev/null ]]; then
+    echo "Gradle wrapper (gradlew) or Gradle is not found. Please install Gradle or navigate to the correct directory."
+    exit 1
+fi
 
 # Compile and build the project
-./gradlew clean compileJava shadowJar
+if [[ -f "./gradlew" ]]; then
+    ./gradlew clean compileJava shadowJar
+else
+    gradle clean compileJava shadowJar
+fi
 
-# Convert files to Unix format (works for macOS/Linux, requires dos2unix installed)
+# Check if dos2unix is installed and convert files if they exist
 if command -v dos2unix >/dev/null 2>&1; then
-    dos2unix EXPECTED-UNIX.TXT
-    dos2unix ACTUAL.TXT
+    [[ -f "EXPECTED-UNIX.TXT" ]] && dos2unix EXPECTED-UNIX.TXT || echo "EXPECTED-UNIX.TXT not found. Skipping."
+    [[ -f "ACTUAL.TXT" ]] && dos2unix ACTUAL.TXT || echo "ACTUAL.TXT not found. Skipping."
 else
     echo "dos2unix command not found. Skipping line-ending conversion."
 fi
 
-# Update EXPECTED-UNIX.TXT content, replacing 'EXPECTED' with 'ACTUAL'
-# Cross-platform compatibility for macOS/Linux
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # For macOS
-    sed -i '' 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+# Check if EXPECTED-UNIX.TXT exists before running sed
+if [[ -f "EXPECTED-UNIX.TXT" ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+    else
+        sed -i 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+    fi
 else
-    # For Linux and other Unix-like systems
-    sed -i 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+    echo "EXPECTED-UNIX.TXT not found. Cannot perform sed operation."
 fi
 
-# Alternative cross-platform approach without using sed -i
-# sed 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT > TEMP.TXT && mv TEMP.TXT EXPECTED-UNIX.TXT
-
-# Run the tests and display the output
-./runtest.sh
-
+# Run the tests
+if [[ -f "./runtest.sh" ]]; then
+    ./runtest.sh
+else
+    echo "runtest.sh script not found."
+    exit 1
+fi
