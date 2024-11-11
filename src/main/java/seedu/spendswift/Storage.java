@@ -88,7 +88,7 @@ public class Storage {
                     Category category = new Category(categoryName);
                     String baseCurrency = "EUR";
                     CurrencyConverter currencyConverter = new CurrencyConverter (baseCurrency);
-                    Budget budget = new Budget(category, limit,homeCurrency, currencyConverter);
+                    Budget budget = new Budget(category, limit,baseCurrency, currencyConverter);
                     String homeCurrency=parts[2];
                     trackerData.getBudgets().put(category, budget);
                 } else {
