@@ -96,9 +96,9 @@ public class BudgetManager {
          * @param limit The budget limit to be set for the category (in dollars)
          */
 public void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency) {
-    CurrencyConverter currencyConverter ;
+  
     try { 
-        currencyConverter = new CurrencyConverter(homeCurrency);
+    CurrencyConverter currencyConverter = new CurrencyConverter(homeCurrency);
     } catch (IOException e) {
         // Handle the exception, e.g., log it or set currencyConverter to null if needed
         e.printStackTrace();
