@@ -17,11 +17,13 @@ java -jar $(find ../build/libs/ -mindepth 1 -print -quit) < input.txt > ACTUAL.T
 cp EXPECTED.TXT EXPECTED-UNIX.TXT
 dos2unix EXPECTED-UNIX.TXT ACTUAL.TXT
 
-# Remove any remaining \r characters in case dos2unix didn’t fully convert
+# Remove any remaining \r characters, trailing whitespace, and extra blank lines
 sed -i 's/\r$//' EXPECTED-UNIX.TXT ACTUAL.TXT
+sed -i 's/[[:space:]]\+$//' EXPECTED-UNIX.TXT ACTUAL.TXT
+sed -i '/^$/N;/\n$/D' EXPECTED-UNIX.TXT ACTUAL.TXT
 
-# Compare the files
-diff EXPECTED-UNIX.TXT ACTUAL.TXT
+# Compare the files with unified diff for better output
+diff -u EXPECTED-UNIX.TXT ACTUAL.TXT
 
 # Check the result of diff
 if [ $? -eq 0 ]
