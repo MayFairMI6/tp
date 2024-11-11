@@ -5,7 +5,6 @@ import seedu.spendswift.command.Budget;
 import seedu.spendswift.command.Category;
 import seedu.spendswift.command.Expense;
 import seedu.spendswift.command.TrackerData;
-import seedu.spendswift.CurrencyConverter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
