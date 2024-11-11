@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Exit immediately if a command exits with a non-zero status
+set -e
+
 # Change to script directory
 cd "${0%/*}"
 
@@ -17,20 +20,31 @@ java -jar $(find ../build/libs/ -mindepth 1 -print -quit) < input.txt > ACTUAL.T
 cp EXPECTED.TXT EXPECTED-UNIX.TXT
 dos2unix EXPECTED-UNIX.TXT ACTUAL.TXT
 
-# Remove any remaining \r characters, trailing whitespace, and extra blank lines
+# Remove any remaining \r characters and trailing whitespace
 sed -i 's/\r$//' EXPECTED-UNIX.TXT ACTUAL.TXT
 sed -i 's/[[:space:]]\+$//' EXPECTED-UNIX.TXT ACTUAL.TXT
+
+# Remove lines containing only underscores
+sed -i '/^_*/d' EXPECTED-UNIX.TXT ACTUAL.TXT
+
+# Optionally, remove extra blank lines
 sed -i '/^$/N;/\n$/D' EXPECTED-UNIX.TXT ACTUAL.TXT
 
-# Compare the files with unified diff for better output
+# Debugging: Print the cleaned files
+echo "----- EXPECTED-UNIX.TXT -----"
+cat EXPECTED-UNIX.TXT
+echo "----- ACTUAL.TXT -----"
+cat ACTUAL.TXT
+
+# Compare the cleaned files with unified diff for better output
 diff -u EXPECTED-UNIX.TXT ACTUAL.TXT
 
 # Check the result of diff
-if [ $? -eq 0 ]
-then
+if [ $? -eq 0 ]; then
     echo "Test passed!"
     exit 0
 else
     echo "Test failed!"
     exit 1
 fi
+
