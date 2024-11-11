@@ -13,7 +13,7 @@ import java.util.Map;
 public class CurrencyConverter {
 
     private static final String API_KEY = 
-    "04a6ee8bec44c7f011340564e098b97e";  // Load API key from environment or secure storage in a real application
+        "04a6ee8bec44c7f011340564e098b97e";  // Load API key from environment or secure storage in a real application
     private static final String BASE_URL = "https://api.exchangeratesapi.io/v1/latest";
     private static Map<String, Double> exchangeRates;
     private static final String BASE_CURRENCY = "EUR"; // The fixed base currency for free plan
