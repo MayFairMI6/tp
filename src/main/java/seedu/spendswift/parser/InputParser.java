@@ -1,4 +1,5 @@
 package seedu.spendswift.parser;
+
 import seedu.spendswift.CurrencyConverter;
 import seedu.spendswift.ErrorMessage;
 
@@ -54,6 +55,7 @@ public class InputParser {
     public String parseCategory(String input) {
         return parseComponent(input, "c/");
     }
+
     public double parseLimit(String input) {
         String limitStr = parseComponent(input, "l/");
         try {
@@ -73,7 +75,7 @@ public class InputParser {
             return Double.NaN;
         }
     }
-   
+
     public int parseIndex(String input) {
         String indexStr = parseComponent(input, "e/");
         try {
@@ -84,6 +86,8 @@ public class InputParser {
     }
 
 }
+
+
 
 
 
