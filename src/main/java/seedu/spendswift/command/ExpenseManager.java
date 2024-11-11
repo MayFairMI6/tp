@@ -4,6 +4,7 @@ package seedu.spendswift.command;
 import seedu.spendswift.Format;
 import seedu.spendswift.parser.InputParser;
 import seedu.spendswift.CurrencyConverter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,35 +12,9 @@ import java.util.Map;
 
 public class ExpenseManager {
 
-//@@author kq2003
-    public void addExpenseRequest(String input, ExpenseManager expenseManager, TrackerData trackerData) {
-        try {
-            InputParser parser = new InputParser();
-            String name = parser.parseName(input);
-            double amount = parser.parseAmount(input);
-            String category = parser.parseCategory(input);
-            String originalCurrency = parser.parseOriginalCurrency(input);
-            String homeCurrency = parser.parseHomeCurrency(input);
-            double convertedAmount = CurrencyConverter.convert(amount, originalCurrency, homeCurrency);
-
-            if (name.isEmpty() || amount == 0) {
-                System.out.println("Invalid input! Please provide name, amount, and category.");
-                return;
-            }
-
-            if (amount < 0) {
-                System.out.println("Invalid input! Please provide a positive amount!");
-                return;
-            }
-        expenseManager.addExpense(trackerData, name, amount, category, originalCurrency, homeCurrency, convertedAmount);
-    } catch (Exception e) {
-            System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
-        }
-}
-
     /**
      * Adds a new expense with the specified name, amount, and category.
-     *
+     * <p>
      * It checks if the specified category exists in the tracker. If it does not exist,
      * the method creates a new category with the specified name and adds it to the list of categories.
      * Then, it creates a new expense with the given name, amount, and category and adds it to the list of expenses.
@@ -49,8 +24,7 @@ public class ExpenseManager {
      * @param amount       The amount of the expense.
      * @param categoryName The name of the category to which the expense belongs.
      */
-    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, 
-                                  String originalCurrency, String homeCurrency, double convertedAmount) {
+    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, String originalCurrency, String homeCurrency, double convertedAmount) {
         List<Expense> expenses = trackerData.getExpenses();
         List<Category> categories = trackerData.getCategories();
 
@@ -71,14 +45,39 @@ public class ExpenseManager {
             categories.add(existingCategory);
             System.out.println("Category '" + formattedCategoryName + "' added successfully.");
         }
-        Expense newExpense = new Expense(name, amount, existingCategory,
-                                         originalCurrency, homeCurrency, convertedAmount);
+        Expense newExpense = new Expense(name, amount, existingCategory, originalCurrency, homeCurrency, convertedAmount);
         expenses.add(newExpense);
 
         // update categories and expenses
         trackerData.setExpenses(expenses);
         trackerData.setCategories(categories);
         System.out.println("Added" + newExpense);
+    }
+
+    //@@author kq2003
+    public void addExpenseRequest(String input, ExpenseManager expenseManager, TrackerData trackerData) {
+        try {
+            InputParser parser = new InputParser();
+            String name = parser.parseName(input);
+            double amount = parser.parseAmount(input);
+            String category = parser.parseCategory(input);
+            String originalCurrency = parser.parseOriginalCurrency(input);
+            String homeCurrency = parser.parseHomeCurrency(input);
+            double convertedAmount = CurrencyConverter.convert(amount, originalCurrency, homeCurrency);
+
+            if (name.isEmpty() || amount == 0) {
+                System.out.println("Invalid input! Please provide name, amount, and category.");
+                return;
+            }
+
+            if (amount < 0) {
+                System.out.println("Invalid input! Please provide a positive amount!");
+                return;
+            }
+            expenseManager.addExpense(trackerData, name, amount, category, originalCurrency, homeCurrency, convertedAmount);
+        } catch (Exception e) {
+            System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
+        }
     }
 
     //@@author AdiMangalam
@@ -100,7 +99,7 @@ public class ExpenseManager {
 
     /**
      * Deletes an expense at the specified index in the expense list.
-     *
+     * <p>
      * This method checks if the provided index is within the valid range of the
      * expense list. If the index is invalid (out of bounds), an error message is displayed.
      * If the index is valid, it removes the expense at the specified index and
@@ -121,15 +120,15 @@ public class ExpenseManager {
     }
 
     //@@author MayfairMI6
+
     /**
      * Displays all expenses grouped by their respective categories.
-     *
+     * <p>
      * This method first checks if there are any expenses in the tracker. If no
      * expenses are present, it informs the user. If expenses exist, they are grouped
      * by their category and displayed in a formatted manner under each category.
-     *
+     * <p>
      * Each category is displayed once with its associated expenses listed under it.
-     *
      */
     public void viewExpensesByCategory(TrackerData trackerData) {
         List<Expense> expenses = trackerData.getExpenses();
@@ -198,6 +197,11 @@ public class ExpenseManager {
         System.out.println("Category '" + formattedCategoryName + "' does not exist.");
     }
 }
+
+
+
+
+
 
 
 
