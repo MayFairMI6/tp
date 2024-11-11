@@ -1,50 +1,32 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status
-set -e
+# Make the script executable
+chmod +x runtest.sh
 
-# Change to script directory
-cd "${0%/*}"
+# Compile and build the project
+./gradlew clean compileJava shadowJar
 
-# Go to the project root and build the JAR file
-cd ..
-./gradlew clean shadowJar
-
-# Go to the test directory
-cd text-ui-test
-
-# Run the JAR with input and save the output
-java -jar $(find ../build/libs/ -mindepth 1 -print -quit) < input.txt > ACTUAL.TXT
-
-# Prepare the expected file and convert line endings
-cp EXPECTED.TXT EXPECTED-UNIX.TXT
-dos2unix EXPECTED-UNIX.TXT ACTUAL.TXT
-
-# Remove any remaining \r characters and trailing whitespace
-sed -i 's/\r$//' EXPECTED-UNIX.TXT ACTUAL.TXT
-sed -i 's/[[:space:]]\+$//' EXPECTED-UNIX.TXT ACTUAL.TXT
-
-# Remove lines containing only underscores
-sed -i '/^_*/d' EXPECTED-UNIX.TXT ACTUAL.TXT
-
-# Optionally, remove extra blank lines
-sed -i '/^$/N;/\n$/D' EXPECTED-UNIX.TXT ACTUAL.TXT
-
-# Debugging: Print the cleaned files
-echo "----- EXPECTED-UNIX.TXT -----"
-cat EXPECTED-UNIX.TXT
-echo "----- ACTUAL.TXT -----"
-cat ACTUAL.TXT
-
-# Compare the cleaned files with unified diff for better output
-diff -u EXPECTED-UNIX.TXT ACTUAL.TXT
-
-# Check the result of diff
-if [ $? -eq 0 ]; then
-    echo "Test passed!"
-    exit 0
+# Convert files to Unix format (works for macOS/Linux, requires dos2unix installed)
+if command -v dos2unix >/dev/null 2>&1; then
+    dos2unix EXPECTED-UNIX.TXT
+    dos2unix ACTUAL.TXT
 else
-    echo "Test failed!"
-    exit 1
+    echo "dos2unix command not found. Skipping line-ending conversion."
 fi
+
+# Update EXPECTED-UNIX.TXT content, replacing 'EXPECTED' with 'ACTUAL'
+# Cross-platform compatibility for macOS/Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # For macOS
+    sed -i '' 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+else
+    # For Linux and other Unix-like systems
+    sed -i 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+fi
+
+# Alternative cross-platform approach without using sed -i
+# sed 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT > TEMP.TXT && mv TEMP.TXT EXPECTED-UNIX.TXT
+
+# Run the tests and display the output
+./runtest.sh
 
