@@ -25,16 +25,16 @@ public class Expense {
      * @param name The amount of the expense.
      * @param category The category associated with the expense.
      */
-    public Expense(String name, double amount, Category category, String originalCurrency, String  homeCurrency, double convertedAmount) {
+    public Expense(String name, double amount, Category category, String originalCurrency, String homeCurrency, double convertedAmount) {
         this.name = name;
         this.amount = amount;
         this.category = category;
         //@@author MayFairMI6
         this.originalCurrency = originalCurrency;
         this.homeCurrency = homeCurrency;
-        this.convertedAmount= convertedAmount;
+        this.convertedAmount = convertedAmount;
     }
-    
+
 
     /**
      * Returns the name of the expense.
@@ -63,13 +63,13 @@ public class Expense {
         this.category = category;
     }
 
-    public String getoriginalCurrency(){
+    public String getoriginalCurrency() {
         return originalCurrency;
     }
-    public String gethomeCurrency(){
+    public String gethomeCurrency() {
         return homeCurrency;
     }
-    public double getConvertedAmount(){
+    public double getConvertedAmount() {
         return convertedAmount;
     }
 
@@ -81,10 +81,9 @@ public class Expense {
      */
     @Override
     public String toString() {
-    return "Item: " + name + 
-           ",  Amount: " + Format.formatAmount(amount) + " " + originalCurrency + 
-           ", Converted Amount: " + Format.formatAmount(convertedAmount) + " " + homeCurrency + 
-           ", Category: " + getCategory();
-}
+        return "Item: " + name +
+            ",  Amount: " + Format.formatAmount(amount) + " " + originalCurrency +
+            ", Converted Amount: " + Format.formatAmount(convertedAmount) + " " + homeCurrency +
+            ", Category: " + getCategory();
+    }
 
-}
