@@ -1,7 +1,6 @@
 package seedu.spendswift.command;
 
 import seedu.spendswift.Format;
-import seedu.spendswift.CurrencyConverter;
 import java.io.IOException;
 
 
@@ -12,17 +11,11 @@ public class Budget {
     private Category category; // Private to prevent unauthorized access or changes
     private double limit; // Private to control modifications to the budget
     private TrackerData trackerData;
-    private CurrencyConverter currencyConverter;
-    public Budget(Category category, double limit,String homeCurrency, CurrencyConverter currencyConverter) {
+    public Budget(Category category, double limit,String homeCurrency) {
         this.category = category;
         this.limit = limit;
         this.trackerData = trackerData;
         this.homeCurrency= homeCurrency;
-        try {
-            this.currencyConverter = new CurrencyConverter(homeCurrency);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public Category getCategory() {
