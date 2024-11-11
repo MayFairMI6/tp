@@ -158,7 +158,7 @@ public void setBudgetLimit(TrackerData trackerData, String categoryName, double 
                 return;
             }
 
-            setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
+            BudgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
         }
