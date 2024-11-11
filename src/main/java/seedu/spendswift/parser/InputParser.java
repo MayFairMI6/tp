@@ -1,5 +1,4 @@
 package seedu.spendswift.parser;
-import seedu.spendswift.CurrencyConverter;
 import seedu.spendswift.ErrorMessage;
 
 public class InputParser {
@@ -36,12 +35,14 @@ public class InputParser {
     private String parseCurrency(String input, String currencyPrefix) throws IllegalArgumentException {
         // Ensure the currency code follows immediately after the prefix and is exactly three letters long
         if (!input.matches(".*" + currencyPrefix + "[a-zA-Z]{3}(\\b|\\s|$).*")) {
-            throw new IllegalArgumentException("Error: A 3-letter currency code directly following '" + currencyPrefix + "' is needed.");
+            throw new IllegalArgumentException("Error: A 3-letter currency code directly following '" 
+                                               + currencyPrefix + "' is needed.");
         }
 
         String currency = parseComponent(input, currencyPrefix);
         if (currency.isEmpty() || !currency.matches("[a-zA-Z]{3}")) {
-            throw new IllegalArgumentException("Error: A valid 3-letter currency code is needed after '" + currencyPrefix + "'. Found: '" + currency + "'");
+            throw new IllegalArgumentException("Error: A valid 3-letter currency code is needed after '" 
+                                               + currencyPrefix + "'. Found: '" + currency + "'");
         }
 
         return currency.toUpperCase();
