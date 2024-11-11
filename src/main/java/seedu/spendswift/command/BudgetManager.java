@@ -95,7 +95,7 @@ public class BudgetManager {
          * @param categoryName The name of the category to set the budget for
          * @param limit The budget limit to be set for the category (in dollars)
          */
-public void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
+public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
                            CurrencyConverter currencyConverter) {
   
     List<Category> categories = trackerData.getCategories();
@@ -158,7 +158,7 @@ public void setBudgetLimit(TrackerData trackerData, String categoryName, double 
                 return;
             }
 
-            BudgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
+            budgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
         }
