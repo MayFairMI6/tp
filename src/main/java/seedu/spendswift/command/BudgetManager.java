@@ -146,6 +146,7 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
             String category = parser.parseCategory(input);
             double limit = parser.parseLimit(input);
             String homeCurrency = parser.parseHomeCurrency(input);
+            CurrencyConverter currencyConverter = null;
             try { 
             CurrencyConverter currencyConverter = new CurrencyConverter(homeCurrency);
             } catch (IOException e) {
