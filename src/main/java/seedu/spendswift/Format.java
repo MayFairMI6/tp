@@ -1,10 +1,9 @@
-//@@author glenda-1506
+/@@author glenda-1506
 package seedu.spendswift;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.lang.Double;
 
 public class Format {
     public static String formatInput(String input) {
@@ -26,21 +25,21 @@ public class Format {
     }
     //@@author MayFair-MI6
     public static String getFormattedAmount(String inputString) {
-    try {
-        // Split the input string into its components
-        String[] parts = inputString.split(" "); 
+        try {
+            // Split the input string into its components
+            String[] parts = inputString.split(" ");
 
-        // Extract the individual values, assuming a consistent format
-        double amount = Double.parseDouble(parts[0]);
-        String originalCurrency = parts[1];
-        double convertedAmount = Double.parseDouble(parts[2]);
-        String homeCurrency = parts[3];
+            // Extract the individual values, assuming a consistent format
+            double amount = Double.parseDouble(parts[0]);
+            String originalCurrency = parts[1];
+            double convertedAmount = Double.parseDouble(parts[2]);
+            String homeCurrency = parts[3];
 
-        // Format the output string
-        return String.format("%.2f %s (%.2f %s)", amount, originalCurrency, convertedAmount, homeCurrency);
+            // Format the output string
+            return String.format("%.2f %s (%.2f %s)", amount, originalCurrency, convertedAmount, homeCurrency);
 
-    } catch (Exception e) {  // Catch any potential errors (e.g., incorrect input format)
-        return "Invalid input format. Please provide a string like '100.00 USD 85.00 EUR'";
+        } catch (Exception e) { // Catch any potential errors (e.g., incorrect input format)
+            return "Invalid input format. Please provide a string like '100.00 USD 85.00 EUR'";
+        }
     }
-}
 }
