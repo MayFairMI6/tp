@@ -24,10 +24,9 @@ public class ExpenseManager {
      * @param amount       The amount of the expense.
      * @param categoryName The name of the category to which the expense belongs.
      */
-    public static void addExpense(TrackerData trackerData, String name, double amount,
-                                  String categoryName, String originalCurrency, String homeCurrency, double convertedAmount) {
-        List<Expense> expenses = trackerData.getExpenses();
-        List<Category> categories = trackerData.getCategories();
+    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, String originalCurrency, String homeCurrency, double convertedAmount) {
+        List < Expense > expenses = trackerData.getExpenses();
+        List < Category > categories = trackerData.getCategories();
 
         if (categoryName == null || categoryName.trim().isEmpty()) {
             categoryName = "Uncategorized";
@@ -35,7 +34,7 @@ public class ExpenseManager {
 
         String formattedCategoryName = Format.formatInput(categoryName.trim());
         Category existingCategory = null;
-        for (Category category : categories) {
+        for (Category category: categories) {
             if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
                 existingCategory = category;
                 break;
@@ -46,8 +45,7 @@ public class ExpenseManager {
             categories.add(existingCategory);
             System.out.println("Category '" + formattedCategoryName + "' added successfully.");
         }
-        Expense newExpense = new Expense(name, amount, existingCategory,
-                                         originalCurrency, homeCurrency, convertedAmount);
+        Expense newExpense = new Expense(name, amount, existingCategory, originalCurrency, homeCurrency, convertedAmount);
         expenses.add(newExpense);
 
         // update categories and expenses
@@ -76,8 +74,8 @@ public class ExpenseManager {
                 System.out.println("Invalid input! Please provide a positive amount!");
                 return;
             }
-            expenseManager.addExpense(trackerData, name, amount, category,
-                                      originalCurrency, homeCurrency, convertedAmount);
+
+            expenseManager.addExpense(trackerData, name, amount, category, originalCurrency, homeCurrency, convertedAmount);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
         }
@@ -111,7 +109,7 @@ public class ExpenseManager {
      * @param expenseIndex the 0-based index of the expense to delete
      */
     public void deleteExpense(TrackerData trackerData, int expenseIndex) {
-        List<Expense> expenses = trackerData.getExpenses();
+        List < Expense > expenses = trackerData.getExpenses();
 
         if (expenseIndex < 0 || expenseIndex >= expenses.size()) {
             System.out.println("Invalid index. Unable to delete expense.");
@@ -134,7 +132,7 @@ public class ExpenseManager {
      * Each category is displayed once with its associated expenses listed under it.
      */
     public void viewExpensesByCategory(TrackerData trackerData) {
-        List<Expense> expenses = trackerData.getExpenses();
+        List < Expense > expenses = trackerData.getExpenses();
 
         if (expenses.isEmpty()) {
             System.out.println("No expenses to display.");
@@ -143,22 +141,22 @@ public class ExpenseManager {
         System.out.println("Expenses grouped by categories:");
         // Create a map to group expenses by their category
         //@@author glenda-1506
-        Map<Category, List<Integer>> expenseIndexesByCategory = new HashMap<>();
+        Map < Category, List < Integer >> expenseIndexesByCategory = new HashMap < > ();
         // Populate the map
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
             Category category = expense.getCategory();
 
-            expenseIndexesByCategory.putIfAbsent(category, new ArrayList<>());
+            expenseIndexesByCategory.putIfAbsent(category, new ArrayList < > ());
             expenseIndexesByCategory.get(category).add(i);
         }
 
         // Display the expenses with correct indexes
-        for (Category category : expenseIndexesByCategory.keySet()) {
+        for (Category category: expenseIndexesByCategory.keySet()) {
             System.out.println("Category: " + category);
-            List<Integer> expenseIndexes = expenseIndexesByCategory.get(category);
+            List < Integer > expenseIndexes = expenseIndexesByCategory.get(category);
 
-            for (Integer index : expenseIndexes) {
+            for (Integer index: expenseIndexes) {
                 Expense expense = expenses.get(index);
                 System.out.println(" " + expense + " [" + (index + 1) + "] ");
             }
@@ -183,11 +181,11 @@ public class ExpenseManager {
     }
 
     private void tagExpenseHelper(TrackerData trackerData, int expenseIndex, String categoryName) {
-        List<Expense> expenses = trackerData.getExpenses();
-        List<Category> categories = trackerData.getCategories();
+        List < Expense > expenses = trackerData.getExpenses();
+        List < Category > categories = trackerData.getCategories();
 
         String formattedCategoryName = Format.formatInput(categoryName.trim());
-        for (Category category : categories) {
+        for (Category category: categories) {
             if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
                 Expense expense = expenses.get(expenseIndex);
                 expense.setCategory(category);
@@ -199,11 +197,6 @@ public class ExpenseManager {
         trackerData.setExpenses(expenses);
         System.out.println("Category '" + formattedCategoryName + "' does not exist.");
     }
-}
-
-
-
-
 
 
 
