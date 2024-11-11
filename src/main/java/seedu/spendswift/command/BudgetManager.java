@@ -96,8 +96,7 @@ public class BudgetManager {
      * @param categoryName The name of the category to set the budget for
      * @param limit The budget limit to be set for the category (in dollars)
      */
-    public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
-        CurrencyConverter currencyConverter) {
+    public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency) {
 
         List < Category > categories = trackerData.getCategories();
         Map < Category, Budget > budgets = trackerData.getBudgets();
@@ -127,7 +126,7 @@ public class BudgetManager {
                 Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
         } else {
             Budget newBudget = new Budget(existingCategory, limit,
-                                          homeCurrency, currencyConverter); // Pass homeCurrency to constructor
+                                          homeCurrency); // Pass homeCurrency to constructor
             budgets.put(existingCategory, newBudget);
             System.out.println("Set budget for category '" + existingCategory + "' to " +
                 Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
@@ -148,20 +147,13 @@ public class BudgetManager {
             String category = parser.parseCategory(input);
             double limit = parser.parseLimit(input);
             String homeCurrency = parser.parseHomeCurrency(input);
-            CurrencyConverter currencyConverter = null;
-            try {
-                currencyConverter = new CurrencyConverter(homeCurrency);
-            } catch (IOException e) {
-                // Handle the exception, e.g., log it or set currencyConverter to null if needed
-                e.printStackTrace();
-            }
 
             if (category == null || category.isEmpty() || limit == 0) {
                 System.out.println("Invalid input! Please provide category name and limit.");
                 return;
             }
 
-            budgetManager.setBudgetLimit(trackerData, category, limit, homeCurrency, currencyConverter);
+            budgetManager.setBudgetLimit(trackerData, category, limit, homeCurrency);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
         }
