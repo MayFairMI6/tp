@@ -197,6 +197,7 @@ public class ExpenseManager {
         trackerData.setExpenses(expenses);
         System.out.println("Category '" + formattedCategoryName + "' does not exist.");
     }
+}
 
 
 
