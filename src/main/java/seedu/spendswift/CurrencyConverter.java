@@ -39,7 +39,8 @@ public class CurrencyConverter {
                 response.append(line);
             }
             JsonObject jsonObject = new Gson().fromJson(response.toString(), JsonObject.class);
-            exchangeRates = new Gson().fromJson(jsonObject.get("rates"), new TypeToken<Map<String, Double>>(){}.getType());
+            exchangeRates = new Gson().fromJson(jsonObject.get("rates"), 
+                                                new TypeToken<Map<String, Double>>(){}.getType());
         } finally {
             connection.disconnect();
         }
