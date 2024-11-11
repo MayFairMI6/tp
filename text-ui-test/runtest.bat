@@ -1,19 +1,19 @@
 @echo off
-setlocal enableextensions
-pushd %~dp0
-
 cd ..
 call gradlew clean shadowJar
 
-cd build\libs
-for /f "tokens=*" %%a in (
-    'dir /b *.jar'
-) do (
-    set jarloc=%%a
+cd text-ui-test
+java -jar ..\build\libs\*.jar < input.txt > ACTUAL.TXT
+
+REM Convert EXPECTED.TXT and ACTUAL.TXT to Unix line endings
+powershell -Command "(Get-Content EXPECTED.TXT) -replace '\r\n', '`n' | Set-Content EXPECTED-UNIX.TXT"
+powershell -Command "(Get-Content ACTUAL.TXT) -replace '\r\n', '`n' | Set-Content ACTUAL-UNIX.TXT"
+
+fc /W EXPECTED-UNIX.TXT ACTUAL-UNIX.TXT
+if %errorlevel% equ 0 (
+    echo Test passed!
+    exit /b 0
+) else (
+    echo Test failed!
+    exit /b 1
 )
-
-java -jar %jarloc% < ..\..\text-ui-test\input.txt > ..\..\text-ui-test\ACTUAL.TXT
-
-cd ..\..\text-ui-test
-
-FC ACTUAL.TXT EXPECTED.TXT >NUL && ECHO Test passed! || Echo Test failed!
