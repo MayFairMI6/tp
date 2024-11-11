@@ -95,14 +95,9 @@ public class BudgetManager {
          * @param categoryName The name of the category to set the budget for
          * @param limit The budget limit to be set for the category (in dollars)
          */
-public void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency) {
+public void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
+                           CurrencyConverter currencyConverter) {
   
-    try { 
-    CurrencyConverter currencyConverter = new CurrencyConverter(homeCurrency);
-    } catch (IOException e) {
-        // Handle the exception, e.g., log it or set currencyConverter to null if needed
-        e.printStackTrace();
-    }
     List<Category> categories = trackerData.getCategories();
     Map<Category, Budget> budgets = trackerData.getBudgets();
     String formattedCategoryName = Format.formatInput(categoryName.trim());
@@ -151,13 +146,19 @@ public void setBudgetLimit(TrackerData trackerData, String categoryName, double 
             String category = parser.parseCategory(input);
             double limit = parser.parseLimit(input);
             String homeCurrency = parser.parseHomeCurrency(input);
-
+            try { 
+            CurrencyConverter currencyConverter = new CurrencyConverter(homeCurrency);
+            } catch (IOException e) {
+        // Handle the exception, e.g., log it or set currencyConverter to null if needed
+            e.printStackTrace();
+            }
+   
             if (category == null || category.isEmpty() || limit == 0) {
                 System.out.println("Invalid input! Please provide category name and limit.");
                 return;
             }
 
-            budgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency);
+            budgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
         }
