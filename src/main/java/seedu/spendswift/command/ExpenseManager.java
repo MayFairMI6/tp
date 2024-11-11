@@ -25,7 +25,8 @@ public class ExpenseManager {
      * @param categoryName The name of the category to which the expense belongs.
      */
     public static void addExpense(TrackerData trackerData, String name, double amount,
-                                  String categoryName, String originalCurrency, String homeCurrency, double convertedAmount) {
+                                  String categoryName, String originalCurrency, 
+                                  String homeCurrency, double convertedAmount) {
         List < Expense > expenses = trackerData.getExpenses();
         List < Category > categories = trackerData.getCategories();
 
