@@ -86,4 +86,5 @@ public class Expense {
             ", Converted Amount: " + Format.formatAmount(convertedAmount) + " " + homeCurrency +
             ", Category: " + getCategory();
     }
+}
 
