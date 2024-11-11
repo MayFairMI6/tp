@@ -99,7 +99,8 @@ public class Storage {
                     String homeCurrency = parts[4];
                     double convertedAmount  = CurrencyConverter.convert(amount,originalCurrency,homeCurrency);
                     Category category = loadCategory(trackerData, categoryName);
-                    Expense expense = new Expense(expenseName, amount, category,originalCurrency, homeCurrency,convertedAmount);
+                    Expense expense = new Expense(expenseName, amount, category,
+                                                  originalCurrency, homeCurrency,convertedAmount);
                     trackerData.getExpenses().add(expense);
                 }
             }
