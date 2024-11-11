@@ -24,7 +24,8 @@ public class ExpenseManager {
      * @param amount       The amount of the expense.
      * @param categoryName The name of the category to which the expense belongs.
      */
-    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, String originalCurrency, String homeCurrency, double convertedAmount) {
+    public static void addExpense(TrackerData trackerData, String name, double amount,
+                                  String categoryName, String originalCurrency, String homeCurrency, double convertedAmount) {
         List < Expense > expenses = trackerData.getExpenses();
         List < Category > categories = trackerData.getCategories();
 
@@ -45,7 +46,8 @@ public class ExpenseManager {
             categories.add(existingCategory);
             System.out.println("Category '" + formattedCategoryName + "' added successfully.");
         }
-        Expense newExpense = new Expense(name, amount, existingCategory, originalCurrency, homeCurrency, convertedAmount);
+        Expense newExpense = new Expense(name, amount, existingCategory, 
+                                         originalCurrency, homeCurrency, convertedAmount);
         expenses.add(newExpense);
 
         // update categories and expenses
@@ -75,7 +77,8 @@ public class ExpenseManager {
                 return;
             }
 
-            expenseManager.addExpense(trackerData, name, amount, category, originalCurrency, homeCurrency, convertedAmount);
+            expenseManager.addExpense(trackerData, name, amount, category, 
+                                      originalCurrency, homeCurrency, convertedAmount);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
         }
