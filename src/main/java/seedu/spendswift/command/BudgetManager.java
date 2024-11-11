@@ -11,9 +11,10 @@ import java.util.Map;
 
 //@@author kq2003
 public class BudgetManager {
+    public boolean isAutoResetEnabled;
     public int lastResetMonth;
     private String homeCurrency;
-    public boolean isAutoResetEnabled;
+    
 
 
     public BudgetManager() {
