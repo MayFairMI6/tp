@@ -16,11 +16,13 @@ public class CurrencyConverter {
     private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
     private static Map<String, Double> exchangeRates;
+    String baseCurrency = "EUR";
+
 
     public CurrencyConverter(String baseCurrency) throws IOException {
         fetchExchangeRates(baseCurrency);
     }
-
+    
     private static void fetchExchangeRates(String baseCurrency) throws IOException {
         String urlString = BASE_URL + "?access_key=" + API_KEY + "&base=" + baseCurrency;
         URL url = new URL(urlString);
