@@ -12,19 +12,18 @@ import java.util.Map;
 
 public class CurrencyConverter {
 
-    private static final String API_KEY = "04a6ee8bec44c7f011340564e098b97e";  // Load API key from environment
-    private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
-
+    private static final String API_KEY = "04a6ee8bec44c7f011340564e098b97e";  // Load API key from environment or secure storage in a real application
+    private static final String BASE_URL = "https://api.exchangeratesapi.io/v1/latest";
     private static Map<String, Double> exchangeRates;
-    String baseCurrency = "EUR";
+    private static final String BASE_CURRENCY = "EUR"; // The fixed base currency for free plan
 
-
-    public CurrencyConverter(String baseCurrency) throws IOException {
-        fetchExchangeRates(baseCurrency);
+    public CurrencyConverter() throws IOException {
+        fetchExchangeRates();
     }
     
-    private static void fetchExchangeRates(String baseCurrency) throws IOException {
-        String urlString = BASE_URL + "?access_key=" + API_KEY + "&base=" + baseCurrency;
+    // Updated fetchExchangeRates method to use EUR as base currency (fixed for free plan)
+    private static void fetchExchangeRates() throws IOException {
+        String urlString = BASE_URL + "?access_key=" + API_KEY;
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -46,12 +45,18 @@ public class CurrencyConverter {
         }
     }
 
+    // Convert between any two currencies using EUR as the base reference
     public static double convert(double amount, String fromCurrency, String toCurrency) {
         if (fromCurrency.equals(toCurrency)) {
-            return amount;
+            return amount; // No conversion needed if currencies are the same
         }
-
-        double rate = exchangeRates.get(toCurrency) / exchangeRates.get(fromCurrency);
+        
+        // Retrieve rates from EUR to the specified currencies
+        double fromRate = exchangeRates.get(fromCurrency);
+        double toRate = exchangeRates.get(toCurrency);
+        
+        // Convert the amount
+        double rate = toRate / fromRate;
         return amount * rate;
     }
 }
