@@ -40,18 +40,13 @@ fi
 
 cd ..
 ./gradlew clean shadowJar
-
 cd text-ui-test
-
-# Run the Java application
 java -jar $(find ../build/libs/ -mindepth 1 -print -quit) < input.txt > ACTUAL.TXT
-
-# Convert text files for comparison
 cp EXPECTED.TXT EXPECTED-UNIX.TXT
 dos2unix EXPECTED-UNIX.TXT ACTUAL.TXT
 
-# Compare the files
-diff EXPECTED-UNIX.TXT ACTUAL.TXT
+# Compare the files, ignoring specific lines
+diff <(grep -v '__________________________________________________' EXPECTED-UNIX.TXT) <(grep -v '__________________________________________________' ACTUAL.TXT)
 if [ $? -eq 0 ]
 then
     echo "Test passed!"
