@@ -35,7 +35,7 @@ public class Storage {
                 String expenseName = expense.getName();
                 double amount = expense.getAmount();
                 String categoryName = expense.getCategory().getName();
-                String originalCurrency = expense.getOriginalCurrency();
+                String originalCurrency = expense.getoriginalCurrency();
                 String gethomeCurrency = expense.gethomeCurrency();
                 double getConvertedAmount = expense.getConvertedAmount();
                 writer.write(expenseName + ", " + amount + ", " + categoryName + "\n");
