@@ -13,20 +13,20 @@ import java.util.Map;
 public class BudgetManager {
     public int lastResetMonth;
     private String homeCurrency;
-  
-    public boolean isAutoResetEnabled = false;  // Default state
+
+
 
     public BudgetManager() {
         this.lastResetMonth = -1;
         this.isAutoResetEnabled = false;
-        this.homeCurrency=homeCurrency;
+        this.homeCurrency = homeCurrency;
     }
 
     public boolean getAutoResetStatus() {
         return this.isAutoResetEnabled;
     }
 
-  
+    public boolean isAutoResetEnabled = false;
 
     public void toggleAutoReset() {
         isAutoResetEnabled = !isAutoResetEnabled;
@@ -71,9 +71,9 @@ public class BudgetManager {
      * for each budget, but the reset logic can be adjusted if needed.
      */
     public void resetBudgets(TrackerData trackerData) {
-        Map<Category, Budget> budgets = trackerData.getBudgets();
+        Map < Category, Budget > budgets = trackerData.getBudgets();
 
-        for (Budget budget : budgets.values()) {
+        for (Budget budget: budgets.values()) {
             // Resetting the budget logic can be adjusted as needed
             budget.setLimit(budget.getLimit()); // For now, just maintaining the same limit
         }
@@ -83,56 +83,56 @@ public class BudgetManager {
     }
 
     //@@author MayFairMI6
-         /**
-         * Sets a budget limit for a specific category.
-         *
-         * If the category already has a budget, this method updates the budget limit.
-         * If the category does not have a budget set, it creates a new budget for the category.
-         *
-         * This method is used to track and control spending limits for different categories.
-         * After setting the budget, a message is displayed to confirm the action.
-         *
-         * @param categoryName The name of the category to set the budget for
-         * @param limit The budget limit to be set for the category (in dollars)
-         */
-public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
-                           CurrencyConverter currencyConverter) {
-  
-    List<Category> categories = trackerData.getCategories();
-    Map<Category, Budget> budgets = trackerData.getBudgets();
-    String formattedCategoryName = Format.formatInput(categoryName.trim());
+    /**
+     * Sets a budget limit for a specific category.
+     *
+     * If the category already has a budget, this method updates the budget limit.
+     * If the category does not have a budget set, it creates a new budget for the category.
+     *
+     * This method is used to track and control spending limits for different categories.
+     * After setting the budget, a message is displayed to confirm the action.
+     *
+     * @param categoryName The name of the category to set the budget for
+     * @param limit The budget limit to be set for the category (in dollars)
+     */
+    public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
+        CurrencyConverter currencyConverter) {
 
-    if (limit < 0) {
-        System.out.println("Invalid input! Please provide a positive amount!");
-        return;
-    }
+        List < Category > categories = trackerData.getCategories();
+        Map < Category, Budget > budgets = trackerData.getBudgets();
+        String formattedCategoryName = Format.formatInput(categoryName.trim());
 
-    Category existingCategory = null;
-    for (Category category : categories) {
-        if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
-            existingCategory = category;
-            break;
+        if (limit < 0) {
+            System.out.println("Invalid input! Please provide a positive amount!");
+            return;
         }
-    }
 
-    if (existingCategory == null) {
-        System.out.println("Category '" + formattedCategoryName + "' not found. Please add the category first.");
-        return;
-    }
+        Category existingCategory = null;
+        for (Category category: categories) {
+            if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
+                existingCategory = category;
+                break;
+            }
+        }
 
-    if (budgets.containsKey(existingCategory)) {
-        budgets.get(existingCategory).setLimit(limit);
-        System.out.println("Updated budget for category '" + existingCategory + "' to "
-                + Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
-    } else {
-        Budget newBudget = new Budget(existingCategory, limit, homeCurrency,currencyConverter); // Pass homeCurrency to constructor
-        budgets.put(existingCategory, newBudget);
-        System.out.println("Set budget for category '" + existingCategory + "' to "
-                + Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
-    }
+        if (existingCategory == null) {
+            System.out.println("Category '" + formattedCategoryName + "' not found. Please add the category first.");
+            return;
+        }
 
-    trackerData.setBudgets(budgets); // This line remains the same
-}
+        if (budgets.containsKey(existingCategory)) {
+            budgets.get(existingCategory).setLimit(limit);
+            System.out.println("Updated budget for category '" + existingCategory + "' to " +
+                Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
+        } else {
+            Budget newBudget = new Budget(existingCategory, limit, homeCurrency, currencyConverter); // Pass homeCurrency to constructor
+            budgets.put(existingCategory, newBudget);
+            System.out.println("Set budget for category '" + existingCategory + "' to " +
+                Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
+        }
+
+        trackerData.setBudgets(budgets); // This line remains the same
+    }
     //@author MayFairMI6
     public int getLastResetMonth() {
         return lastResetMonth;
@@ -147,19 +147,19 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
             double limit = parser.parseLimit(input);
             String homeCurrency = parser.parseHomeCurrency(input);
             CurrencyConverter currencyConverter = null;
-            try { 
-             currencyConverter = new CurrencyConverter(homeCurrency);
+            try {
+                currencyConverter = new CurrencyConverter(homeCurrency);
             } catch (IOException e) {
-        // Handle the exception, e.g., log it or set currencyConverter to null if needed
-            e.printStackTrace();
+                // Handle the exception, e.g., log it or set currencyConverter to null if needed
+                e.printStackTrace();
             }
-   
+
             if (category == null || category.isEmpty() || limit == 0) {
                 System.out.println("Invalid input! Please provide category name and limit.");
                 return;
             }
 
-            budgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
+            budgetManager.setBudgetLimit(trackerData, category, limit, homeCurrency, currencyConverter);
         } catch (Exception e) {
             System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
         }
@@ -168,7 +168,7 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
     //@@author MayFairMI6
     public void simulateMonthChange() {
         Calendar calendar = Calendar.getInstance();
-        lastResetMonth = (calendar.get(Calendar.MONTH) + 1) % 12;  // Simulate advancing by one month
+        lastResetMonth = (calendar.get(Calendar.MONTH) + 1) % 12; // Simulate advancing by one month
     }
     /**
      * Displays the current budget status for each category.
@@ -179,9 +179,9 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
      * If no budgets are set, a message is shown indicating the absence of budgets.
      */
     public void viewBudget(TrackerData trackerData) {
-        
-        List<Expense> expenses = trackerData.getExpenses();
-        Map<Category, Budget> budgets = trackerData.getBudgets();
+
+        List < Expense > expenses = trackerData.getExpenses();
+        Map < Category, Budget > budgets = trackerData.getBudgets();
 
         if (budgets.isEmpty()) {
             System.out.println("No budgets set for any category.");
@@ -189,7 +189,7 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
         }
 
         // mapping total expenses for a category to each category
-        Map<Category, Double> totalExpensesToCategory = new HashMap<>();
+        Map < Category, Double > totalExpensesToCategory = new HashMap < > ();
         for (Expense expense: expenses) {
             Category category = expense.getCategory();
             if (totalExpensesToCategory.containsKey(category)) {
@@ -207,11 +207,11 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
 
             if (remainingBudget >= 0) {
                 System.out.println(category + ": " + Format.formatAmount(totalExpense) + " " + homeCurrency + " spent, " +
-                Format.formatAmount(remainingBudget) + " " + homeCurrency + " remaining");
+                    Format.formatAmount(remainingBudget) + " " + homeCurrency + " remaining");
             } else {
                 Double positive = Math.abs(remainingBudget);
                 System.out.println(category + ": " + Format.formatAmount(totalExpense) + " " + homeCurrency + " spent, " +
-                "Over budget by " + Format.formatAmount(positive) + " " + homeCurrency); // Added homeCurrency code
+                    "Over budget by " + Format.formatAmount(positive) + " " + homeCurrency); // Added homeCurrency code
             }
         }
 
@@ -222,4 +222,3 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
             }
         }
     }
-}
