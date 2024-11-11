@@ -1,41 +1,66 @@
 #!/bin/bash
 
-# Make sure we're in the correct directory by checking for gradlew
-if [[ ! -f "./gradlew" && ! command -v gradle &> /dev/null ]]; then
-    echo "Gradle wrapper (gradlew) or Gradle is not found. Please install Gradle or navigate to the correct directory."
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Function to print error messages
+error_exit() {
+    echo "Error: $1"
     exit 1
-fi
+}
 
-# Compile and build the project
+# 1. Check for Gradle Wrapper or Gradle Installation
 if [[ -f "./gradlew" ]]; then
-    ./gradlew clean compileJava shadowJar
+    GRADLE_CMD="./gradlew"
+elif command -v gradle >/dev/null 2>&1; then
+    GRADLE_CMD="gradle"
 else
-    gradle clean compileJava shadowJar
+    error_exit "Gradle wrapper (gradlew) not found and Gradle is not installed. Please install Gradle or add gradlew to your project."
 fi
 
-# Check if dos2unix is installed and convert files if they exist
+echo "Using Gradle command: $GRADLE_CMD"
+
+# 2. Clean and Build the Project
+echo "Cleaning and building the project..."
+$GRADLE_CMD clean compileJava shadowJar || error_exit "Gradle build failed."
+
+# 3. Convert Line Endings to Unix Format
 if command -v dos2unix >/dev/null 2>&1; then
-    [[ -f "EXPECTED-UNIX.TXT" ]] && dos2unix EXPECTED-UNIX.TXT || echo "EXPECTED-UNIX.TXT not found. Skipping."
-    [[ -f "ACTUAL.TXT" ]] && dos2unix ACTUAL.TXT || echo "ACTUAL.TXT not found. Skipping."
+    echo "Converting line endings to Unix format..."
+    for file in EXPECTED-UNIX.TXT ACTUAL.TXT; do
+        if [[ -f "$file" ]]; then
+            dos2unix "$file" || error_exit "Failed to convert $file to Unix format."
+        else
+            echo "Warning: $file not found. Skipping conversion."
+        fi
+    done
 else
-    echo "dos2unix command not found. Skipping line-ending conversion."
+    echo "dos2unix not found. Skipping line-ending conversion."
 fi
 
-# Check if EXPECTED-UNIX.TXT exists before running sed
-if [[ -f "EXPECTED-UNIX.TXT" ]]; then
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+# 4. Run the Application or Test to Generate ACTUAL.TXT
+# Replace the following line with the actual command to run your application/tests.
+# For example, if your JAR is named app.jar and takes input from a file or arguments:
+# java -jar build/libs/app.jar < input.txt > ACTUAL.TXT
+
+# Example placeholder command (modify as needed):
+echo "Running the application to generate ACTUAL.TXT..."
+java -jar build/libs/your-app.jar > ACTUAL.TXT || error_exit "Failed to run the application."
+
+# 5. Compare ACTUAL.TXT with EXPECTED-UNIX.TXT
+if [[ -f "EXPECTED-UNIX.TXT" && -f "ACTUAL.TXT" ]]; then
+    echo "Comparing ACTUAL.TXT with EXPECTED-UNIX.TXT..."
+    diff -u EXPECTED-UNIX.TXT ACTUAL.TXT > diff_output.txt
+    if [[ $? -eq 0 ]]; then
+        echo "Test passed! ACTUAL.TXT matches EXPECTED-UNIX.TXT."
+        rm diff_output.txt
+        exit 0
     else
-        sed -i 's/EXPECTED/ACTUAL/g' EXPECTED-UNIX.TXT
+        echo "Test failed! Differences found:"
+        cat diff_output.txt
+        exit 1
     fi
 else
-    echo "EXPECTED-UNIX.TXT not found. Cannot perform sed operation."
+    error_exit "One or both of EXPECTED-UNIX.TXT and ACTUAL.TXT are missing."
 fi
 
-# Run the tests
-if [[ -f "./runtest.sh" ]]; then
-    ./runtest.sh
-else
-    echo "runtest.sh script not found."
-    exit 1
-fi
