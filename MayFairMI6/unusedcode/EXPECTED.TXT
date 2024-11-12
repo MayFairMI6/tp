@@ -1,0 +1,5 @@
+Data file not found.
+Hiya! How can I assist?
+Category 'Groceries' added successfully.
+Goodbye! :> Hope to see you again soon!
+Data has been saved!
