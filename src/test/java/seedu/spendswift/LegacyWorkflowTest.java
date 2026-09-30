@@ -58,6 +58,18 @@ class LegacyWorkflowTest {
     }
 
     @Test
+    void unicodeNamesSurviveSaveAndReload() throws IOException {
+        TrackerData data = new TrackerData();
+        data.getExpenses().add(new Expense("Café", 12, new Category("旅費")));
+        Storage storage = new Storage(directory.resolve("unicode.txt").toString());
+        storage.saveData(data);
+        TrackerData restored = new TrackerData();
+        storage.loadData(restored);
+        assertEquals("Café", restored.getExpenses().get(0).getName());
+        assertEquals("旅費", restored.getExpenses().get(0).getCategory().getName());
+    }
+
+    @Test
     void malformedFileIsReportedWithoutChangingItsContents() throws IOException {
         Path file = directory.resolve("spendswift.txt");
         String original = "Budgets\nFood, not-a-number\nExpenses\n";

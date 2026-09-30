@@ -9,7 +9,6 @@ import seedu.spendswift.command.TrackerData;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 
 import java.io.IOException;
 import java.util.Map;
@@ -94,7 +93,8 @@ public class Storage {
 
         TrackerData destination = trackerData;
         trackerData = new TrackerData();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = java.nio.file.Files.newBufferedReader(
+                file.toPath(), java.nio.charset.StandardCharsets.UTF_8)) {
             String line;
             boolean isBudgetSection = true;
 

@@ -41,7 +41,7 @@ Commands without currency fields remain supported. In a category with a currency
 
 ## Verification
 
-On September 30, 2026, **46 JUnit tests**, Checkstyle, JAR packaging, and the Unix CLI smoke test passed locally. Tests include conversion and rounding, provider failure, currency mismatch rejection, budget totals, old-format loading, currency persistence, and preserving an existing file after a failed save.
+On September 30, 2026, **47 JUnit tests**, Checkstyle, JAR packaging, and the Unix CLI smoke test passed locally. Tests include conversion and rounding, provider failure, currency mismatch rejection, budget totals, old-format loading, currency persistence, and preserving an existing file after a failed save.
 
 A live Frankfurter USD→EUR conversion was exercised through the packaged application; the same converted amount and remaining budget were verified after restarting. This is a functional smoke test, not a benchmark. The optional credential-backed Exchange Rates API path has not been live-tested with a replacement key.
 
