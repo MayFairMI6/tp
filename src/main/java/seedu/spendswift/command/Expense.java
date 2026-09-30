@@ -25,7 +25,23 @@ public class Expense {
      * @param name The amount of the expense.
      * @param category The category associated with the expense.
      */
-    public Expense(String name, double amount, Category category, String originalCurrency, String  homeCurrency, double convertedAmount) {
+    // Compatibility with the original single-currency coursework API.
+    public Expense(String name, double amount, Category category) {
+        this(name, amount, category, "", "", amount);
+    }
+
+    public Expense(String name, double amount, Category category, String originalCurrency,
+                   String homeCurrency, double convertedAmount) {
+        if (!Double.isFinite(amount) || amount < 0 || !Double.isFinite(convertedAmount) || convertedAmount < 0) {
+            throw new IllegalArgumentException("Expense amounts must be finite and non-negative.");
+        }
+        if (originalCurrency.isEmpty() != homeCurrency.isEmpty()) {
+            throw new IllegalArgumentException("Provide both original and home currency.");
+        }
+        if (!originalCurrency.isEmpty()) {
+            originalCurrency = seedu.spendswift.CurrencyConverter.currencyCode(originalCurrency);
+            homeCurrency = seedu.spendswift.CurrencyConverter.currencyCode(homeCurrency);
+        }
         this.name = name;
         this.amount = amount;
         this.category = category;
@@ -34,7 +50,7 @@ public class Expense {
         this.homeCurrency = homeCurrency;
         this.convertedAmount= convertedAmount;
     }
-    
+
 
     /**
      * Returns the name of the expense.
@@ -81,10 +97,14 @@ public class Expense {
      */
     @Override
     public String toString() {
-    return "Item: " + name + 
-           ",  Amount: " + Format.formatAmount(amount) + " " + originalCurrency + 
-           ", Converted Amount: " + Format.formatAmount(convertedAmount) + " " + homeCurrency + 
-           ", Category: " + getCategory();
-}
+        if (originalCurrency.isEmpty() && homeCurrency.isEmpty()) {
+            return " Item: " + name + ", Amount: " + Format.formatAmount(amount)
+                + ", Category: " + getCategory();
+        }
+        return "Item: " + name +
+            ",  Amount: " + Format.formatAmount(amount, originalCurrency) +
+            ", Converted Amount: " + Format.formatAmount(convertedAmount, homeCurrency) +
+            ", Category: " + getCategory();
+    }
 
 }

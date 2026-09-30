@@ -24,6 +24,14 @@ public class Format {
         }
     }
 
+    public static String formatAmount(double amount, String currency) {
+        if (currency == null || currency.isEmpty()) {
+            return formatAmount(amount);
+        }
+        int digits = java.util.Currency.getInstance(currency).getDefaultFractionDigits();
+        return BigDecimal.valueOf(amount).setScale(digits, RoundingMode.HALF_UP).toPlainString() + " " + currency;
+    }
+
     //@@author MayFair-MI6
     public static String getFormattedAmount(String inputString) {
         try {

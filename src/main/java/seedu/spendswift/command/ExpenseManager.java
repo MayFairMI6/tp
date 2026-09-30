@@ -11,31 +11,44 @@ import java.util.Map;
 
 public class ExpenseManager {
 
-//@@author kq2003
+    private final CurrencyConverter converter;
+
+    public ExpenseManager() {
+        this(new CurrencyConverter());
+    }
+
+    public ExpenseManager(CurrencyConverter converter) {
+        this.converter = converter;
+    }
+
+    //@@author kq2003
     public void addExpenseRequest(String input, ExpenseManager expenseManager, TrackerData trackerData) {
         try {
             InputParser parser = new InputParser();
             String name = parser.parseName(input);
             double amount = parser.parseAmount(input);
             String category = parser.parseCategory(input);
-            String originalCurrency = parser.parseOriginalCurrency(input);
-            String homeCurrency = parser.parseHomeCurrency(input);
-            double convertedAmount = CurrencyConverter.convert(amount, originalCurrency, homeCurrency);
-
-            if (name.isEmpty() || amount == 0) {
-                System.out.println("Invalid input! Please provide name, amount, and category.");
-                return;
+            if (name.isEmpty() || !Double.isFinite(amount) || amount <= 0) {
+                throw new IllegalArgumentException("Provide a name and a finite positive amount.");
             }
-
-            if (amount < 0) {
-                System.out.println("Invalid input! Please provide a positive amount!");
-                return;
+            if (!input.contains("ocur/") && !input.contains("hcur/")) {
+                String currency = "";
+                for (Budget budget : trackerData.getBudgets().values()) {
+                    if (budget.getCategory().getName().equalsIgnoreCase(category.trim())) {
+                        currency = budget.getHomeCurrency();
+                    }
+                }
+                addExpense(trackerData, name, amount, category, currency, currency, amount);
+            } else {
+                String original = parser.parseOriginalCurrency(input);
+                String home = parser.parseHomeCurrency(input);
+                double converted = converter.convert(amount, original, home);
+                addExpense(trackerData, name, amount, category, original, home, converted);
             }
-        expenseManager.addExpense(trackerData, name, amount, category, originalCurrency, homeCurrency, convertedAmount);
-    } catch (Exception e) {
-            System.out.println("Error parsing the input. Please use the correct format for add-expense commands.");
+        } catch (java.io.IOException | IllegalArgumentException e) {
+            System.out.println("Expense not added: " + e.getMessage());
         }
-}
+    }
 
     /**
      * Adds a new expense with the specified name, amount, and category.
@@ -49,8 +62,15 @@ public class ExpenseManager {
      * @param amount       The amount of the expense.
      * @param categoryName The name of the category to which the expense belongs.
      */
-    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName, 
+    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName) {
+        addExpense(trackerData, name, amount, categoryName, "", "", amount);
+    }
+
+    public static void addExpense(TrackerData trackerData, String name, double amount, String categoryName,
                                   String originalCurrency, String homeCurrency, double convertedAmount) {
+        if (!Double.isFinite(amount) || amount <= 0 || !Double.isFinite(convertedAmount) || convertedAmount < 0) {
+            throw new IllegalArgumentException("Provide a finite positive expense amount.");
+        }
         List<Expense> expenses = trackerData.getExpenses();
         List<Category> categories = trackerData.getCategories();
 
@@ -64,6 +84,19 @@ public class ExpenseManager {
             if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
                 existingCategory = category;
                 break;
+            }
+        }
+        if (existingCategory != null) {
+            Budget budget = trackerData.getBudgets().get(existingCategory);
+            if (budget != null && !budget.getHomeCurrency().equals(homeCurrency)) {
+                throw new IllegalArgumentException("Expense home currency must match the category budget ("
+                        + budget.getHomeCurrency() + ").");
+            }
+            for (Expense expense : expenses) {
+                if (expense.getCategory().equals(existingCategory)
+                        && !expense.gethomeCurrency().equals(homeCurrency)) {
+                    throw new IllegalArgumentException("Use one home currency per category.");
+                }
             }
         }
         if (existingCategory == null) {
@@ -188,6 +221,16 @@ public class ExpenseManager {
         for (Category category : categories) {
             if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
                 Expense expense = expenses.get(expenseIndex);
+                Budget budget = trackerData.getBudgets().get(category);
+                if (budget != null && !budget.getHomeCurrency().equals(expense.gethomeCurrency())) {
+                    throw new IllegalArgumentException("Expense home currency must match the destination budget.");
+                }
+                for (Expense other : expenses) {
+                    if (other.getCategory().equals(category)
+                            && !other.gethomeCurrency().equals(expense.gethomeCurrency())) {
+                        throw new IllegalArgumentException("Use one home currency per category.");
+                    }
+                }
                 expense.setCategory(category);
                 System.out.println("Tagged expense: " + expense);
                 return;

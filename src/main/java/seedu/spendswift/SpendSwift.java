@@ -21,6 +21,8 @@ public class SpendSwift {
             storage.loadData(trackerData);
         } catch (IOException e) {
             ui.printLoadingError(e.getMessage());
+            // Preserve an unreadable existing file instead of saving partial state over it.
+            return;
         }
 
         CategoryManager categoryManager = new CategoryManager();

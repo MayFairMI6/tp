@@ -46,7 +46,7 @@ public class InputParser {
                                                currencyPrefix + "'. Found: '" + currency + "'");
         }
 
-        return currency.toUpperCase();
+        return seedu.spendswift.CurrencyConverter.currencyCode(currency);
     }
 
     public String parseName(String input) {

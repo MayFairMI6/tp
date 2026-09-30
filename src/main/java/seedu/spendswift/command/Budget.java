@@ -2,7 +2,7 @@ package seedu.spendswift.command;
 
 import seedu.spendswift.Format;
 import seedu.spendswift.CurrencyConverter;
-import java.io.IOException;
+
 
 
 
@@ -13,16 +13,23 @@ public class Budget {
     private double limit; // Private to control modifications to the budget
     private TrackerData trackerData;
     private CurrencyConverter currencyConverter;
+    public Budget(Category category, double limit) {
+        this(category, limit, "", null);
+    }
+
     public Budget(Category category, double limit,String homeCurrency, CurrencyConverter currencyConverter) {
         this.category = category;
-        this.limit = limit;
+        setLimit(limit);
+        this.homeCurrency = homeCurrency.isEmpty() ? "" : CurrencyConverter.currencyCode(homeCurrency);
+        this.currencyConverter = currencyConverter;
+    }
+
+    public void attachTracker(TrackerData trackerData) {
         this.trackerData = trackerData;
-        this.homeCurrency= homeCurrency;
-        try {
-            this.currencyConverter = new CurrencyConverter(homeCurrency);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
+
+    public String getHomeCurrency() {
+        return homeCurrency;
     }
 
     public Category getCategory() {
@@ -34,22 +41,26 @@ public class Budget {
     }
 
     public void setLimit(double limit) {
-        if (limit < 0) {
+        if (!Double.isFinite(limit) || limit < 0) {
             throw new IllegalArgumentException("Budget limit cannot be negative.");
         }
         this.limit = limit;
     }
 
     public double getRemainingLimit() {
+        if (trackerData == null) {
+            throw new IllegalStateException("Budget must be attached to tracker data "
+                    + "before computing remaining funds.");
+        }
         double totalExpenses = trackerData.getExpenses().stream()
             .filter(e -> e.getCategory().equals(category))
-            .mapToDouble(Expense::getAmount)
+            .mapToDouble(Expense::getConvertedAmount)
             .sum();
         return limit - totalExpenses;
     }
 
     @Override
  public String toString() {
-        return "Budget for category '" + category + "' is " + Format.formatAmount(limit) + " " + homeCurrency;
+        return "Budget for category '" + category + "' is " + Format.formatAmount(limit, homeCurrency);
     }
 }

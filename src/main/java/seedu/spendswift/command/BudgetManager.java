@@ -3,7 +3,7 @@ package seedu.spendswift.command;
 import seedu.spendswift.Format;
 import seedu.spendswift.parser.InputParser;
 import seedu.spendswift.CurrencyConverter;
-import java.io.IOException;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -12,21 +12,19 @@ import java.util.Map;
 //@@author kq2003
 public class BudgetManager {
     public int lastResetMonth;
-    private String homeCurrency;
-  
+
     public boolean isAutoResetEnabled = false;  // Default state
 
     public BudgetManager() {
         this.lastResetMonth = -1;
         this.isAutoResetEnabled = false;
-        this.homeCurrency=homeCurrency;
     }
 
     public boolean getAutoResetStatus() {
         return this.isAutoResetEnabled;
     }
 
-  
+
 
     public void toggleAutoReset() {
         isAutoResetEnabled = !isAutoResetEnabled;
@@ -83,7 +81,7 @@ public class BudgetManager {
     }
 
     //@@author MayFairMI6
-         /**
+    /**
          * Sets a budget limit for a specific category.
          *
          * If the category already has a budget, this method updates the budget limit.
@@ -95,44 +93,60 @@ public class BudgetManager {
          * @param categoryName The name of the category to set the budget for
          * @param limit The budget limit to be set for the category (in dollars)
          */
-public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
+    public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit) {
+        setBudgetLimit(trackerData, categoryName, limit, "", null);
+    }
+
+    public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit, String homeCurrency,
                            CurrencyConverter currencyConverter) {
-  
-    List<Category> categories = trackerData.getCategories();
-    Map<Category, Budget> budgets = trackerData.getBudgets();
-    String formattedCategoryName = Format.formatInput(categoryName.trim());
 
-    if (limit < 0) {
-        System.out.println("Invalid input! Please provide a positive amount!");
-        return;
-    }
+        List<Category> categories = trackerData.getCategories();
+        Map<Category, Budget> budgets = trackerData.getBudgets();
+        String formattedCategoryName = Format.formatInput(categoryName.trim());
 
-    Category existingCategory = null;
-    for (Category category : categories) {
-        if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
-            existingCategory = category;
-            break;
+        if (!Double.isFinite(limit) || limit < 0) {
+            System.out.println("Invalid input! Please provide a positive amount!");
+            return;
         }
-    }
 
-    if (existingCategory == null) {
-        System.out.println("Category '" + formattedCategoryName + "' not found. Please add the category first.");
-        return;
-    }
+        Category existingCategory = null;
+        for (Category category : categories) {
+            if (category.getName().equalsIgnoreCase(formattedCategoryName)) {
+                existingCategory = category;
+                break;
+            }
+        }
 
-    if (budgets.containsKey(existingCategory)) {
-        budgets.get(existingCategory).setLimit(limit);
-        System.out.println("Updated budget for category '" + existingCategory + "' to "
-                + Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
-    } else {
-        Budget newBudget = new Budget(existingCategory, limit, homeCurrency,currencyConverter); // Pass homeCurrency to constructor
-        budgets.put(existingCategory, newBudget);
-        System.out.println("Set budget for category '" + existingCategory + "' to "
-                + Format.formatAmount(limit) + " " + homeCurrency); // Added homeCurrency to output
-    }
+        if (existingCategory == null) {
+            System.out.println("Category '" + formattedCategoryName + "' not found. Please add the category first.");
+            return;
+        }
 
-    trackerData.setBudgets(budgets); // This line remains the same
-}
+        for (Expense expense : trackerData.getExpenses()) {
+            if (expense.getCategory().equals(existingCategory)
+                && !expense.gethomeCurrency().equals(homeCurrency)) {
+                throw new IllegalArgumentException("Budget currency must match the category's recorded expenses.");
+            }
+        }
+        if (budgets.containsKey(existingCategory)
+            && !budgets.get(existingCategory).getHomeCurrency().equals(homeCurrency)) {
+            Budget replacement = new Budget(existingCategory, limit, homeCurrency, currencyConverter);
+            budgets.put(existingCategory, replacement);
+        }
+        if (budgets.containsKey(existingCategory)) {
+            budgets.get(existingCategory).setLimit(limit);
+            System.out.println("Updated budget for category '" + existingCategory + "' to "
+                + Format.formatAmount(limit, homeCurrency)); // Added homeCurrency to output
+        } else {
+            Budget newBudget = new Budget(existingCategory, limit, homeCurrency, currencyConverter);
+            budgets.put(existingCategory, newBudget);
+            System.out.println("Set budget for category '" + existingCategory + "' to "
+                + Format.formatAmount(limit, homeCurrency)); // Added homeCurrency to output
+        }
+
+        budgets.get(existingCategory).attachTracker(trackerData);
+        trackerData.setBudgets(budgets);
+    }
     //@author MayFairMI6
     public int getLastResetMonth() {
         return lastResetMonth;
@@ -145,23 +159,17 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
             InputParser parser = new InputParser();
             String category = parser.parseCategory(input);
             double limit = parser.parseLimit(input);
-            String homeCurrency = parser.parseHomeCurrency(input);
+            String homeCurrency = input.contains("hcur/") ? parser.parseHomeCurrency(input) : "";
             CurrencyConverter currencyConverter = null;
-            try { 
-             currencyConverter = new CurrencyConverter(homeCurrency);
-            } catch (IOException e) {
-        // Handle the exception, e.g., log it or set currencyConverter to null if needed
-            e.printStackTrace();
-            }
-   
-            if (category == null || category.isEmpty() || limit == 0) {
+
+            if (category == null || category.isEmpty() || !Double.isFinite(limit) || limit <= 0) {
                 System.out.println("Invalid input! Please provide category name and limit.");
                 return;
             }
 
             budgetManager.setBudgetLimit(trackerData, category, limit,homeCurrency,currencyConverter);
         } catch (Exception e) {
-            System.out.println("Error parsing the input. Please use the correct format for set-budget commands.");
+            System.out.println("Budget not changed: " + e.getMessage());
         }
     }
 
@@ -179,7 +187,7 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
      * If no budgets are set, a message is shown indicating the absence of budgets.
      */
     public void viewBudget(TrackerData trackerData) {
-        
+
         List<Expense> expenses = trackerData.getExpenses();
         Map<Category, Budget> budgets = trackerData.getBudgets();
 
@@ -193,25 +201,27 @@ public static void setBudgetLimit(TrackerData trackerData, String categoryName, 
         for (Expense expense: expenses) {
             Category category = expense.getCategory();
             if (totalExpensesToCategory.containsKey(category)) {
-                totalExpensesToCategory.put(category, totalExpensesToCategory.get(category) + expense.getAmount());
+                totalExpensesToCategory.put(category,
+                        totalExpensesToCategory.get(category) + expense.getConvertedAmount());
             } else {
-                totalExpensesToCategory.put(category, expense.getAmount());
+                totalExpensesToCategory.put(category, expense.getConvertedAmount());
             }
         }
 
         // Calculate remaining budget, and display as needed
         for (Category category: budgets.keySet()) {
             Budget budget = budgets.get(category);
+            String homeCurrency = budget.getHomeCurrency();
             double totalExpense = totalExpensesToCategory.getOrDefault(category, 0.0);
             double remainingBudget = budget.getLimit() - totalExpense;
 
             if (remainingBudget >= 0) {
-                System.out.println(category + ": " + Format.formatAmount(totalExpense) + " " + homeCurrency + " spent, " +
-                Format.formatAmount(remainingBudget) + " " + homeCurrency + " remaining");
+                System.out.println(category + ": " + Format.formatAmount(totalExpense, homeCurrency) + " spent, " +
+                    Format.formatAmount(remainingBudget, homeCurrency) + " remaining");
             } else {
                 Double positive = Math.abs(remainingBudget);
-                System.out.println(category + ": " + Format.formatAmount(totalExpense) + " " + homeCurrency + " spent, " +
-                "Over budget by " + Format.formatAmount(positive) + " " + homeCurrency); // Added homeCurrency code
+                System.out.println(category + ": " + Format.formatAmount(totalExpense, homeCurrency) + " spent, " +
+                    "Over budget by " + Format.formatAmount(positive, homeCurrency)); // Added homeCurrency code
             }
         }
 

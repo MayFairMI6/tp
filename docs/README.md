@@ -1,8 +1,8 @@
-# Duke
+# SpendSwift documentation
 
-{Give product intro here}
-
-Useful links:
-* [User Guide](UserGuide.md)
-* [Developer Guide](DeveloperGuide.md)
-* [About Us](AboutUs.md)
+- [Current project overview](../README.md)
+- [Currency extension: commands, providers, persistence, and checks](CURRENCY_GUIDE.md)
+- [Historical coursework user guide](UserGuide.md)
+- [Historical developer guide](DeveloperGuide.md)
+- [Team](AboutUs.md)
+- [My original contribution record](team/ppp-2.md)
