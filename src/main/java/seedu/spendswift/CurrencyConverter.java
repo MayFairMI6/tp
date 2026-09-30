@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class CurrencyConverter {
 
-    private static final String API_KEY = "04a6ee8bec44c7f011340564e098b97e";  
+    private static final String API_KEY = System.getenv("EXCHANGERATES_API_KEY");
     private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
     private static Map<String, Double> exchangeRates;
@@ -22,8 +22,11 @@ public class CurrencyConverter {
     public CurrencyConverter(String baseCurrency) throws IOException {
         fetchExchangeRates(baseCurrency);
     }
-    
+
     private static void fetchExchangeRates(String baseCurrency) throws IOException {
+        if (API_KEY == null || API_KEY.isBlank()) {
+            throw new IOException("Set EXCHANGERATES_API_KEY to use currency conversion.");
+        }
         String urlString = BASE_URL + "?access_key=" + API_KEY + "&base=" + baseCurrency;
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
